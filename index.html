@@ -3376,16 +3376,24 @@
         }
 
         // --- QUẢN LÝ POINTER LOCK API (KHÓA CON TRỎ CHUỘT XOAY TỰ DO) ---
+        function isTouchMobile() {
+            return (('ontouchstart' in window) || navigator.maxTouchPoints > 0) && window.innerWidth <= 1100;
+        }
         function requestGamePointerLock() {
-            if (canvas.requestPointerLock) {
-                canvas.requestPointerLock();
+            // Điện thoại dùng vuốt màn hình để xoay camera, không yêu cầu Pointer Lock.
+            if (isTouchMobile()) {
+                document.getElementById('pointer-lock-banner').classList.add('hidden');
+                return;
             }
+            if (canvas.requestPointerLock) canvas.requestPointerLock();
         }
 
         document.addEventListener('pointerlockchange', () => {
             const locked = document.pointerLockElement === canvas;
             const lockBanner = document.getElementById('pointer-lock-banner');
-            if (state.started && !state.gameOver && !state.shopOpen) {
+            if (isTouchMobile()) {
+                lockBanner.classList.add('hidden');
+            } else if (state.started && !state.gameOver && !state.shopOpen) {
                 if (locked) lockBanner.classList.add('hidden');
                 else lockBanner.classList.remove('hidden');
             } else {
@@ -3521,7 +3529,8 @@
             document.getElementById('gameover-screen').classList.add('hidden');
             document.getElementById('shop-modal').classList.add('hidden');
             document.getElementById('hud').classList.remove('hidden');
-            document.getElementById('mobile-controls').classList.remove('hidden');\n            document.getElementById('mobile-controls').classList.remove('driving');
+            document.getElementById('mobile-controls').classList.remove('hidden');
+            document.getElementById('mobile-controls').classList.remove('driving');
 
             requestGamePointerLock();
         }
