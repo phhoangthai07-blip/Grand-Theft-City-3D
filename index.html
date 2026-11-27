@@ -87,6 +87,12 @@
             background: rgba(250, 204, 21, 0.45);
             border-color: #facc15;
         }
+        #mobile-joystick{width:118px;height:118px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:radial-gradient(circle,rgba(148,163,184,.24),rgba(15,23,42,.62));backdrop-filter:blur(8px);position:relative;touch-action:none;box-shadow:0 8px 28px #0006}
+        #joystick-knob{position:absolute;width:52px;height:52px;left:31px;top:31px;border-radius:50%;background:linear-gradient(145deg,#ffffffbb,#94a3b877);border:2px solid #ffffff80;box-shadow:0 3px 15px #0008;pointer-events:none}
+        #mobile-controls .touch-btn{border-radius:50%;min-width:48px;min-height:48px;background:rgba(9,18,35,.68);backdrop-filter:blur(9px)}
+        #minimap-wrap.map-expanded{position:fixed!important;left:50%!important;top:50%!important;bottom:auto!important;transform:translate(-50%,-50%);width:min(82vw,82vh)!important;height:min(82vw,82vh)!important;z-index:55;border:3px solid #60a5fa;box-shadow:0 0 0 100vmax #020617b8;pointer-events:auto}
+        @media(max-width:900px) and (orientation:landscape){#mobile-controls{display:flex!important}#hud{padding:5px}#mobile-joystick{width:108px;height:108px}#joystick-knob{left:26px;top:26px}}
+
     </style>
 </head>
 <body>
@@ -307,7 +313,7 @@
         <!-- Thanh dưới cùng: Minimap radar + Thanh vũ khí + Đồng hồ tốc độ -->
         <div class="flex justify-between items-end gap-2">
             <!-- Radar Minimap (Góc dưới bên trái) -->
-            <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-slate-950/90 border-4 border-slate-700/90 shadow-2xl overflow-hidden shrink-0">
+            <div id="minimap-wrap" class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-slate-950/90 border-4 border-slate-700/90 shadow-2xl overflow-hidden shrink-0">
                 <canvas id="minimap-canvas" class="w-full h-full block"></canvas>
                 <div class="absolute bottom-1 inset-x-0 text-center text-[9px] font-bold tracking-widest text-slate-400 uppercase pointer-events-none">
                     RADAR
@@ -352,21 +358,20 @@
         </div>
     </div>
 
-    <!-- Bộ điều khiển cảm ứng cho thiết bị di động -->
-    <div id="mobile-controls" class="hidden fixed bottom-44 inset-x-4 z-30 flex justify-between items-end pointer-events-none md:hidden">
-        <div class="flex gap-2 pointer-events-auto">
-            <button id="m-left" class="touch-btn w-13 h-13 text-lg">◀</button>
-            <button id="m-right" class="touch-btn w-13 h-13 text-lg">▶</button>
+    <!-- Điều khiển cảm ứng: joystick trái, thao tác bên phải -->
+    <div id="mobile-controls" class="hidden fixed bottom-3 inset-x-3 z-30 items-end justify-between pointer-events-none md:hidden">
+        <div id="mobile-joystick" class="pointer-events-auto" aria-label="Joystick di chuyển">
+            <div id="joystick-knob"></div>
         </div>
         <div class="flex flex-col items-end gap-2 pointer-events-auto">
             <div class="flex gap-2">
-                <button id="m-attack" class="touch-btn px-3 h-11 text-xs border-rose-400 text-rose-300">BẮN / ĐÁNH</button>
-                <button id="m-action" class="touch-btn px-3 h-11 text-xs border-amber-400 text-amber-300">TƯƠNG TÁC (F)</button>
+                <button id="m-attack" class="touch-btn px-3 h-11 text-xs border-rose-400 text-rose-300">ĐÁNH</button>
+                <button id="m-action" class="touch-btn px-3 h-11 text-xs border-amber-400 text-amber-300">TƯƠNG TÁC</button>
             </div>
             <div class="flex gap-2">
-                <button id="m-jump" class="touch-btn w-13 h-13 text-xs border-sky-400 text-sky-300">NHẢY</button>
-                <button id="m-down" class="touch-btn w-13 h-13 text-xs">LÙI</button>
-                <button id="m-up" class="touch-btn w-13 h-13 text-xs border-emerald-400 text-emerald-300">TIẾN</button>
+                <button id="m-sprint" class="touch-btn w-14 h-12 text-xs border-emerald-400 text-emerald-300">CHẠY</button>
+                <button id="m-jump" class="touch-btn w-14 h-12 text-xs border-sky-400 text-sky-300">NHẢY</button>
+                <button id="m-map" class="touch-btn w-12 h-12 text-xs">MAP</button>
             </div>
         </div>
     </div>
@@ -3535,10 +3540,26 @@
             el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyCode] = true; });
             const release= (e) => { e.preventDefault(); keys[keyCode] = false; }; el.addEventListener('touchend', release); el.addEventListener('touchcancel', release);
         }
-        bindTouchKey('m-up', 'KeyW');
-        bindTouchKey('m-down', 'KeyS');
-        bindTouchKey('m-left', 'KeyA');
-        bindTouchKey('m-right', 'KeyD');
+        // Joystick ảo: giữ trục tiến/lùi và trái/phải trong khi kéo.
+        const joy=document.getElementById('mobile-joystick'), knob=document.getElementById('joystick-knob');
+        let joyId=null;
+        function setJoy(e){
+            const r=joy.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+            const dx=e.clientX-cx, dy=e.clientY-cy, max=r.width*.34, len=Math.hypot(dx,dy)||1, scale=Math.min(1,max/len);
+            const x=dx*scale,y=dy*scale;
+            knob.style.transform=`translate(${x}px,${y}px)`;
+            keys.KeyA=x < -12; keys.KeyD=x > 12; keys.KeyW=y < -12; keys.KeyS=y > 12;
+        }
+        joy.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;joy.setPointerCapture(joyId);setJoy(e);});
+        joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId){e.preventDefault();setJoy(e);}});
+        const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;knob.style.transform='translate(0,0)';keys.KeyW=keys.KeyA=keys.KeyS=keys.KeyD=false;};
+        joy.addEventListener('pointerup',joyEnd);joy.addEventListener('pointercancel',joyEnd);joy.addEventListener('lostpointercapture',joyEnd);
+        const sprintBtn=document.getElementById('m-sprint');
+        sprintBtn.addEventListener('pointerdown',e=>{e.preventDefault();keys.ShiftLeft=true;sprintBtn.classList.add('star-active');});
+        const sprintOff=e=>{keys.ShiftLeft=false;sprintBtn.classList.remove('star-active');};
+        sprintBtn.addEventListener('pointerup',sprintOff);sprintBtn.addEventListener('pointercancel',sprintOff);sprintBtn.addEventListener('lostpointercapture',sprintOff);
+        document.getElementById('m-map').addEventListener('click',e=>{e.preventDefault();document.getElementById('minimap-wrap').classList.toggle('map-expanded');});
+        document.getElementById('minimap-wrap').addEventListener('click',()=>document.getElementById('minimap-wrap').classList.remove('map-expanded'));
         document.getElementById('m-jump').addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (!player.inVehicle && player.isGrounded) {
@@ -3559,6 +3580,24 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
+        // Chu kỳ ngày/đêm: 1 giờ thực tế tương đương 5 phút trong game.
+        let worldTime=8*60; // phút trong ngày, bắt đầu lúc 08:00
+        function updateDayNight(dt){
+            worldTime=(worldTime+dt*12)%1440; // 12 game-minutes per real second
+            const phase=(worldTime/1440)*Math.PI*2-Math.PI/2;
+            const daylight=Math.max(0,Math.sin(phase));
+            const dusk=Math.max(0,1-Math.abs(daylight)*1.8);
+            const skyDay=new THREE.Color(0x7dd3fc), skyNight=new THREE.Color(0x071326);
+            scene.background.copy(skyNight).lerp(skyDay,daylight);
+            scene.fog.color.copy(scene.background);
+            dirLight.intensity=0.08+daylight*1.05;
+            hemiLight.intensity=0.16+daylight*0.72;
+            dirLight.color.setRGB(1,0.78+daylight*.2,0.58+daylight*.42);
+            dirLight.position.set(player.pos.x+70,Math.max(8,Math.sin(phase)*150),player.pos.z+55);
+            // Đèn đường tự sáng về đêm (nếu có đèn emissive trong cảnh).
+            scene.traverse(o=>{if(o.userData && o.userData.nightLamp){o.material.emissiveIntensity=daylight<.18?2.2:0.05;}});
+        }
+
         // --- VÒNG LẶP CHÍNH ---
         const clock = new THREE.Clock();
 
@@ -3567,6 +3606,7 @@
             const dt = Math.min(clock.getDelta(), 0.05);
 
             if (state.started && !state.gameOver && !state.shopOpen) {
+                updateDayNight(dt);
                 if (state.wantedCooldown > 0) state.wantedCooldown -= dt;
 
                 // Hỗ trợ bắn liên thanh khi giữ chuột trái với súng SMG
