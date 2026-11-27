@@ -18,7 +18,9 @@
             padding: 0;
             width: 100%;
             height: 100%;
+            height: 100dvh;
             overflow: hidden;
+            touch-action: none;
             background-color: #090d16;
             font-family: 'Inter', sans-serif;
         }
@@ -72,6 +74,15 @@
             justify-content: center;
             touch-action: manipulation;
         }
+        .touch-btn { min-width: 44px; min-height: 44px; touch-action: none; }
+        @media (max-width: 900px) and (orientation: landscape) {
+            #mobile-controls { display: flex !important; bottom: max(10px, env(safe-area-inset-bottom)); left: 10px; right: 10px; }
+            #hud { padding: 6px; }
+        }
+        @media (max-width: 900px) and (orientation: portrait) {
+            #landscape-hint { display: flex; }
+        }
+        #landscape-hint { display:none; position:fixed; inset:0; z-index:60; align-items:center; justify-content:center; text-align:center; padding:24px; color:white; background:#07101eee; font-weight:700; }
         .touch-btn:active {
             background: rgba(250, 204, 21, 0.45);
             border-color: #facc15;
@@ -80,6 +91,7 @@
 </head>
 <body>
 
+    <div id="landscape-hint">Hãy xoay điện thoại sang ngang để chơi game<br><span style="font-size:28px">↻</span></div>
     <!-- Canvas 3D Chính -->
     <canvas id="game-canvas"></canvas>
 
@@ -450,7 +462,7 @@
                     const absRatio = Math.abs(speedRatio);
                     const targetFreq = 52 + absRatio * 145;
                     this.engineOsc.frequency.setTargetAtTime(targetFreq, this.ctx.currentTime, 0.05);
-                    this.engineGain.gain.setTargetAtTime(0.095 + absRatio * 0.085, this.ctx.currentTime, 0.05);
+                    this.engineGain.gain.setTargetAtTime(0.16 + absRatio * 0.18, this.ctx.currentTime, 0.05);
                 } else {
                     this.engineGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.08);
                 }
@@ -1801,7 +1813,8 @@
             { type: 'sports', name: 'Super Sports GT', color: 0x22c55e, maxSpeed: 48, accel: 40, turn: 2.85, health: 85, mass: 0.85, radius: 1.85 },
             { type: 'suv', name: 'Offroad SUV / Pickup', color: 0x10b981, maxSpeed: 35, accel: 30, turn: 2.35, health: 145, mass: 1.45, radius: 2.1 },
             { type: 'truck', name: 'Cargo Box Truck', color: 0xf8fafc, maxSpeed: 28, accel: 20, turn: 1.9, health: 210, mass: 2.2, radius: 2.5 },
-            { type: 'bus', name: 'Metro City Bus', color: 0xf59e0b, maxSpeed: 26, accel: 18, turn: 1.75, health: 260, mass: 2.8, radius: 2.8 }
+            { type: 'bus', name: 'Metro City Bus', color: 0xf59e0b, maxSpeed: 26, accel: 18, turn: 1.75, health: 260, mass: 2.8, radius: 2.8 },
+            { type: 'bike', name: 'Xe đạp thành phố', color: 0x16a34a, maxSpeed: 18, accel: 12, turn: 3.3, health: 45, mass: 0.35, radius: 1.0 }
         ];
 
         function createVehicleMesh(spec, isPolice = false) {
@@ -1952,6 +1965,20 @@
                 const windowBand = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.85, 6.8), glassMat);
                 windowBand.position.set(0, 2.05, 0.1);
                 group.add(windowBand);
+            }
+
+            // Xe đạp: khung ống, hai bánh và tay lái.
+            if (spec.type === 'bike') {
+                group.clear(); length = 1.7; width = 0.65; wheelZ = [0.72, -0.72];
+                const rubber = new THREE.MeshStandardMaterial({color:0x171717, roughness:0.95});
+                const metal = new THREE.MeshStandardMaterial({color:spec.color, metalness:0.65, roughness:0.3});
+                const wheelGeoBike = new THREE.TorusGeometry(0.43, 0.055, 8, 18);
+                for (const z of wheelZ) { const w = new THREE.Mesh(wheelGeoBike, rubber); w.rotation.y=Math.PI/2; w.position.set(0,0.48,z); group.add(w); }
+                const tube=(a,b,r=0.045)=>{const d=new THREE.Vector3().subVectors(b,a);const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),8),metal);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());group.add(m);};
+                const A=new THREE.Vector3(0,.48,.72),B=new THREE.Vector3(0,.48,-.72),C=new THREE.Vector3(0,1.02,.12),D=new THREE.Vector3(0,1.02,-.12);
+                tube(A,C);tube(C,D);tube(D,B);tube(B,C);tube(C,new THREE.Vector3(0,1.12,-.72));
+                const seat=new THREE.Mesh(new THREE.BoxGeometry(.28,.08,.18),new THREE.MeshStandardMaterial({color:0x171717}));seat.position.set(0,1.08,.12);group.add(seat);
+                const pedal=new THREE.Mesh(new THREE.BoxGeometry(.5,.06,.08),metal);pedal.position.set(0,.48,0);group.add(pedal);
             }
 
             // Đèn pha & đèn hậu
@@ -3485,11 +3512,28 @@
             document.getElementById('audio-icon').textContent = on ? '🔊' : '🔇';
         });
 
-        // Hỗ trợ điều khiển cảm ứng Mobile
+        // Vuốt trên vùng màn hình trống để xoay camera (đi bộ và lái xe).
+        let lookTouchId = null, lookLastX = 0, lookLastY = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            if (!state.started || state.gameOver || state.shopOpen) return;
+            const t = e.changedTouches[0];
+            if (t.clientX > window.innerWidth * 0.34) { lookTouchId=t.identifier; lookLastX=t.clientX; lookLastY=t.clientY; }
+        }, {passive:true});
+        canvas.addEventListener('touchmove', (e) => {
+            if (lookTouchId === null) return;
+            const t = [...e.changedTouches].find(x=>x.identifier===lookTouchId); if(!t) return;
+            const dx=t.clientX-lookLastX, dy=t.clientY-lookLastY; lookLastX=t.clientX; lookLastY=t.clientY;
+            state.camYaw -= dx*0.006;
+            state.camPitch = THREE.MathUtils.clamp(state.camPitch + dy*0.004, -0.15, 1.15);
+            if(player.inVehicle) player.inVehicle.rotY = state.camYaw - Math.PI;
+            e.preventDefault();
+        }, {passive:false});
+        const clearLookTouch=(e)=>{if([...e.changedTouches].some(t=>t.identifier===lookTouchId))lookTouchId=null;};
+        canvas.addEventListener('touchend',clearLookTouch); canvas.addEventListener('touchcancel',clearLookTouch);
         function bindTouchKey(btnId, keyCode) {
             const el = document.getElementById(btnId);
             el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyCode] = true; });
-            el.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyCode] = false; });
+            const release= (e) => { e.preventDefault(); keys[keyCode] = false; }; el.addEventListener('touchend', release); el.addEventListener('touchcancel', release);
         }
         bindTouchKey('m-up', 'KeyW');
         bindTouchKey('m-down', 'KeyS');
@@ -3506,7 +3550,10 @@
         document.getElementById('m-action').addEventListener('touchstart', (e) => { e.preventDefault(); handleInteractAction(); });
         document.getElementById('m-attack').addEventListener('touchstart', (e) => { e.preventDefault(); performAttack(); });
 
+        const updateOrientationHint=()=>{const hint=document.getElementById('landscape-hint'); if(hint)hint.style.display=(window.innerWidth<window.innerHeight && window.innerWidth<900)?'flex':'none';};
+        updateOrientationHint();
         window.addEventListener('resize', () => {
+            updateOrientationHint();
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -3554,8 +3601,31 @@
             renderer.render(scene, camera);
         }
 
+        function addPlayerHomeAndGarage() {
+            const home = new THREE.Group();
+            const wall = new THREE.MeshStandardMaterial({color:0xe5e7eb, roughness:.72});
+            const trim = new THREE.MeshStandardMaterial({color:0x334155, roughness:.55});
+            const roof = new THREE.MeshStandardMaterial({color:0x7f1d1d, roughness:.8});
+            const glass = new THREE.MeshStandardMaterial({color:0x7dd3fc, roughness:.18, metalness:.25});
+            const box=(w,h,d,mat,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;home.add(m);return m;};
+            // Nhà hai tầng, đặt cạnh khu vực xuất phát.
+            box(12,4.2,10,wall,0,2.1,0); box(12,4.2,10,wall,0,6.3,0);
+            const roofMesh=new THREE.Mesh(new THREE.ConeGeometry(8.1,2.4,4),roof);roofMesh.position.set(0,9.6,0);roofMesh.rotation.y=Math.PI/4;home.add(roofMesh);
+            for(let floor=0;floor<2;floor++){for(let x of [-3.8,0,3.8]){box(1.65,1.35,.12,glass,x,2.1+floor*4.2,5.08);box(.12,1.45,.16,trim,x,2.1+floor*4.2,5.12);}}
+            box(2,3.1,.18,trim,0,1.55,5.12);
+            // Gara cạnh nhà; cửa mở rộng để xe có thể vào khi có hệ thống gara.
+            box(8,3.6,7,wall,10,1.8,1); box(8.2,.22,7.2,roof,10,3.65,1);
+            box(8.1,2.9,.2,trim,10,1.45,4.55);
+            // Nội thất nhìn thấy qua cửa sổ: TV, kệ, ghế và giường.
+            box(2.4,1.35,.18,trim,-2,1.05,2.8); box(1.8,1.05,.12,new THREE.MeshStandardMaterial({color:0x111827,emissive:0x0c2340}),-2,1.65,2.68);
+            box(2.6,.55,1.1,new THREE.MeshStandardMaterial({color:0x64748b}),2,.55,2.2);
+            box(2.2,.3,3,new THREE.MeshStandardMaterial({color:0x94a3b8}),-2,4.55,-1.8);
+            home.position.set(18,0,-18); scene.add(home);
+        }
+
         window.onload = function () {
             buildCity();
+            addPlayerHomeAndGarage();
             initTraffic();
             initPedestrians();
             animate();
