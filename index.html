@@ -92,7 +92,7 @@
         #mobile-controls .touch-btn{border-radius:50%;min-width:48px;min-height:48px;background:rgba(9,18,35,.72);backdrop-filter:blur(9px);touch-action:none}
         #mobile-controls .drive-only{display:none}
         #mobile-controls.driving #onfoot-left,#mobile-controls.driving #onfoot-right{display:none!important}
-        #mobile-controls.driving #mobile-joystick,#mobile-controls.driving #m-jump,#mobile-controls.driving #m-sprint,#mobile-controls.driving #m-attack,#mobile-controls.driving #m-action{display:none!important}
+        #mobile-controls.driving #mobile-joystick,#mobile-controls.driving #m-jump,#mobile-controls.driving #m-attack,#mobile-controls.driving #m-action{display:none!important}
         #mobile-controls.driving .drive-only{display:flex}
         #mobile-controls .drive-only .touch-btn{width:58px;height:58px;font-size:22px}
         #minimap-wrap{cursor:pointer}
@@ -104,6 +104,26 @@
           #joystick-knob{left:26px;top:26px;width:52px;height:52px}
           #minimap-wrap{position:fixed!important;left:9px!important;top:8px!important;bottom:auto!important;right:auto!important;width:76px!important;height:76px!important;z-index:24;border-width:2px;pointer-events:auto}
           #minimap-wrap .radar-label{font-size:7px}
+        }
+
+
+        /* Mobile HUD refinements */
+        @media (max-width:900px) and (orientation:landscape) {
+          #mobile-controls .touch-btn{min-width:46px;min-height:46px}
+          #mobile-controls #m-jump{width:58px;height:58px;font-size:11px}
+          #mobile-controls #m-action{width:78px;height:78px;min-width:78px;min-height:78px;font-size:11px;border-width:3px;border-color:#fbbf24;box-shadow:0 0 18px #f59e0b55}
+          #mobile-controls #m-attack{width:48px;height:48px;min-width:48px;min-height:48px;font-size:10px}
+          #onfoot-right{gap:7px!important;margin-right:3px}
+          #onfoot-left{gap:5px!important}
+          #mobile-joystick{width:104px;height:104px}
+          #joystick-knob{left:24px;top:24px;width:52px;height:52px}
+          #weapon-bar{display:flex!important;position:fixed;left:50%;top:8px;bottom:auto;transform:translateX(-50%);gap:2px;padding:3px;border-radius:10px;z-index:23;opacity:.82}
+          #weapon-bar [data-slot]{width:27px!important;height:27px!important;min-width:27px!important;border-radius:7px!important;font-size:8px!important;display:flex;flex-direction:row;gap:2px}
+          #weapon-bar [data-slot] span{font-size:9px!important}
+          #hud .w-44{width:108px!important;padding:4px!important;gap:3px!important}
+          #hud .w-44 .text-\[10px\]{font-size:8px!important}
+          #hud .w-44 .h-2{height:4px!important}
+          #hud .w-44 .h-1\.5{height:3px!important}
         }
 
     </style>
@@ -369,18 +389,15 @@
         </div>
     </div>
 
-    <!-- Điều khiển cảm ứng: joystick trái, thao tác bên phải -->
+    <!-- Điều khiển cảm ứng: joystick trái; nhảy và tương tác bên phải -->
     <div id="mobile-controls" class="hidden fixed bottom-3 inset-x-3 z-30 items-end justify-between pointer-events-none md:hidden">
-        <div id="onfoot-left" class="flex flex-col items-center gap-7 pointer-events-auto">
-            <button id="m-jump" class="touch-btn w-14 h-14 text-xs border-sky-400 text-sky-300">NHẢY</button>
+        <div id="onfoot-left" class="flex flex-col items-center gap-3 pointer-events-auto">
             <div id="mobile-joystick" aria-label="Joystick di chuyển"><div id="joystick-knob"></div></div>
         </div>
-        <div id="onfoot-right" class="flex flex-col items-end gap-2 pointer-events-auto">
-            <div class="flex gap-2">
-                <button id="m-attack" class="touch-btn px-3 h-11 text-xs border-rose-400 text-rose-300">ĐÁNH</button>
-                <button id="m-action" class="touch-btn px-3 h-11 text-xs border-amber-400 text-amber-300">TƯƠNG TÁC</button>
-            </div>
-            <button id="m-sprint" class="touch-btn w-14 h-14 text-xs border-emerald-400 text-emerald-300">CHẠY</button>
+        <div id="onfoot-right" class="flex flex-col items-center gap-2 pointer-events-auto">
+            <button id="m-attack" class="touch-btn px-3 h-11 text-xs border-rose-400 text-rose-300">ĐÁNH</button>
+            <button id="m-jump" class="touch-btn text-xs border-sky-400 text-sky-300">NHẢY</button>
+            <button id="m-action" class="touch-btn text-xs border-amber-400 text-amber-300">TƯƠNG TÁC</button>
         </div>
         <div id="drive-steer" class="drive-only hidden flex-col gap-2 pointer-events-auto">
             <div class="flex gap-2">
@@ -3557,8 +3574,8 @@
             if (lookTouchId === null) return;
             const t = [...e.changedTouches].find(x=>x.identifier===lookTouchId); if(!t) return;
             const dx=t.clientX-lookLastX, dy=t.clientY-lookLastY; lookLastX=t.clientX; lookLastY=t.clientY;
-            state.camYaw -= dx*0.006;
-            state.camPitch = THREE.MathUtils.clamp(state.camPitch + dy*0.004, -0.15, 1.15);
+            state.camYaw -= dx*0.0095;
+            state.camPitch = THREE.MathUtils.clamp(state.camPitch + dy*0.006, -0.15, 1.15);
             if(player.inVehicle) player.inVehicle.rotY = state.camYaw - Math.PI;
             e.preventDefault();
         }, {passive:false});
@@ -3585,7 +3602,7 @@
         joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId){e.preventDefault();setJoy(e);}});
         const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;knob.style.transform='translate(0,0)';keys.KeyW=keys.KeyA=keys.KeyS=keys.KeyD=false;};
         joy.addEventListener('pointerup',joyEnd);joy.addEventListener('pointercancel',joyEnd);joy.addEventListener('lostpointercapture',joyEnd);
-        bindHoldKey('m-sprint','ShiftLeft');
+        
         bindHoldKey('m-turn-left','KeyA'); bindHoldKey('m-turn-right','KeyD');
         bindHoldKey('m-forward','KeyW'); bindHoldKey('m-reverse','KeyS');
         // Chạm minimap để phóng to/thu nhỏ, không cần nút MAP riêng.
@@ -3615,7 +3632,7 @@
         // Chu kỳ ngày/đêm: 1 giờ thực tế tương đương 5 phút trong game.
         let worldTime=8*60; // phút trong ngày, bắt đầu lúc 08:00
         function updateDayNight(dt){
-            worldTime=(worldTime+dt*12)%1440; // 12 game-minutes per real second
+            worldTime=(worldTime+dt*1)%1440; // 1 game-minute per real second
             const phase=(worldTime/1440)*Math.PI*2-Math.PI/2;
             const daylight=Math.max(0,Math.sin(phase));
             const dusk=Math.max(0,1-Math.abs(daylight)*1.8);
