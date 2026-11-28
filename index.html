@@ -18,9 +18,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            height: 100dvh;
             overflow: hidden;
-            touch-action: none;
             background-color: #090d16;
             font-family: 'Inter', sans-serif;
         }
@@ -74,63 +72,27 @@
             justify-content: center;
             touch-action: manipulation;
         }
-        .touch-btn { min-width: 44px; min-height: 44px; touch-action: none; }
-        @media (max-width: 900px) and (orientation: landscape) {
-            #mobile-controls { display: flex !important; bottom: max(10px, env(safe-area-inset-bottom)); left: 10px; right: 10px; }
-            #hud { padding: 6px; }
-        }
-        @media (max-width: 900px) and (orientation: portrait) {
-            #landscape-hint { display: flex; }
-        }
-        #landscape-hint { display:none; position:fixed; inset:0; z-index:60; align-items:center; justify-content:center; text-align:center; padding:24px; color:white; background:#07101eee; font-weight:700; }
         .touch-btn:active {
             background: rgba(250, 204, 21, 0.45);
             border-color: #facc15;
         }
-        #mobile-joystick{width:118px;height:118px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:radial-gradient(circle,rgba(148,163,184,.24),rgba(15,23,42,.62));backdrop-filter:blur(8px);position:relative;touch-action:none;box-shadow:0 8px 28px #0006}
-        #joystick-knob{position:absolute;width:52px;height:52px;left:31px;top:31px;border-radius:50%;background:linear-gradient(145deg,#ffffffbb,#94a3b877);border:2px solid #ffffff80;box-shadow:0 3px 15px #0008;pointer-events:none}
-        #mobile-controls .touch-btn{border-radius:50%;min-width:48px;min-height:48px;background:rgba(9,18,35,.72);backdrop-filter:blur(9px);touch-action:none}
-        #mobile-controls .drive-only{display:none}
-        #mobile-controls.driving #onfoot-left,#mobile-controls.driving #onfoot-right{display:none!important}
-        #mobile-controls.driving #mobile-joystick,#mobile-controls.driving #m-jump,#mobile-controls.driving #m-attack,#mobile-controls.driving #m-action{display:none!important}
-        #mobile-controls.driving .drive-only{display:flex}
-        #mobile-controls .drive-only .touch-btn{width:58px;height:58px;font-size:22px}
-        #minimap-wrap{cursor:pointer}
-        #minimap-wrap.map-expanded{position:fixed!important;left:50%!important;top:50%!important;bottom:auto!important;right:auto!important;transform:translate(-50%,-50%);width:min(78vw,78vh)!important;height:min(78vw,78vh)!important;z-index:55;border:3px solid #60a5fa;box-shadow:0 0 0 100vmax #020617c9;pointer-events:auto}
-        @media(max-width:900px) and (orientation:landscape){
-          #mobile-controls{display:flex!important;bottom:max(8px,env(safe-area-inset-bottom));left:10px;right:10px}
-          #hud{padding:5px}
-          #mobile-joystick{width:108px;height:108px}
-          #joystick-knob{left:26px;top:26px;width:52px;height:52px}
-          #minimap-wrap{position:fixed!important;left:9px!important;top:8px!important;bottom:auto!important;right:auto!important;width:76px!important;height:76px!important;z-index:24;border-width:2px;pointer-events:auto}
-          #minimap-wrap .radar-label{font-size:7px}
+        /* Gợi ý xoay ngang màn hình khi điện thoại đang để dọc */
+        @media screen and (max-width: 920px) and (orientation: portrait) {
+            #rotate-device-hint {
+                display: flex !important;
+            }
         }
-
-
-        /* Mobile HUD refinements */
-        @media (max-width:900px) and (orientation:landscape) {
-          #mobile-controls .touch-btn{min-width:46px;min-height:46px}
-          #mobile-controls #m-jump{width:58px;height:58px;font-size:11px}
-          #mobile-controls #m-action{width:78px;height:78px;min-width:78px;min-height:78px;font-size:11px;border-width:3px;border-color:#fbbf24;box-shadow:0 0 18px #f59e0b55}
-          #mobile-controls #m-attack{width:48px;height:48px;min-width:48px;min-height:48px;font-size:10px}
-          #onfoot-right{gap:7px!important;margin-right:3px}
-          #onfoot-left{gap:5px!important}
-          #mobile-joystick{width:104px;height:104px}
-          #joystick-knob{left:24px;top:24px;width:52px;height:52px}
-          #weapon-bar{display:flex!important;position:fixed;left:50%;top:8px;bottom:auto;transform:translateX(-50%);gap:2px;padding:3px;border-radius:10px;z-index:23;opacity:.82}
-          #weapon-bar [data-slot]{width:27px!important;height:27px!important;min-width:27px!important;border-radius:7px!important;font-size:8px!important;display:flex;flex-direction:row;gap:2px}
-          #weapon-bar [data-slot] span{font-size:9px!important}
-          #hud .w-44{width:108px!important;padding:4px!important;gap:3px!important}
-          #hud .w-44 .text-\[10px\]{font-size:8px!important}
-          #hud .w-44 .h-2{height:4px!important}
-          #hud .w-44 .h-1\.5{height:3px!important}
-        }
-
     </style>
 </head>
 <body>
 
-    <div id="landscape-hint">Hãy xoay điện thoại sang ngang để chơi game<br><span style="font-size:28px">↻</span></div>
+    <!-- Nhắc xoay ngang màn hình trên điện thoại -->
+    <div id="rotate-device-hint" class="hidden fixed inset-0 z-[60] bg-slate-950/95 backdrop-blur-md flex-col items-center justify-center text-center p-6 text-white">
+        <div class="text-5xl mb-4 animate-bounce">📱🔄</div>
+        <h2 class="font-gta text-2xl font-bold text-amber-400 mb-2">XOAY NGANG MÀN HÌNH ĐỂ CHƠI</h2>
+        <p class="text-slate-300 text-sm max-w-xs">Trò chơi được tối ưu cho chế độ màn hình ngang (Landscape) với Joystick và cụm nút điều khiển chuyên nghiệp.</p>
+    </div>
+
     <!-- Canvas 3D Chính -->
     <canvas id="game-canvas"></canvas>
 
@@ -160,30 +122,49 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs bg-slate-950/80 p-4 rounded-2xl border border-slate-800 mb-6">
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">WASD</span>
-                    <span class="text-slate-300">Di chuyển / Lái xe</span>
+                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">MOBILE / PC</span>
+                    <span class="text-slate-300">Joystick + Vuốt xoay camera • Hoặc WASD + Chuột</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">CHUỘT</span>
-                    <span class="text-slate-300">Khóa chuột xoay 360° • Chuột trái bắn/đánh</span>
+                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">NHÀ 2 TẦNG & GARA</span>
+                    <span class="text-slate-300">Gara cất giữ xe • Nội thất TV, giường ngủ hồi máu</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">SPACE / SHIFT</span>
-                    <span class="text-slate-300">Nhảy / Chạy nhanh (hoặc Phanh xe)</span>
+                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">NGÀY & ĐÊM</span>
+                    <span class="text-slate-300">Mặt trời, mặt trăng, đèn đường & đèn cao ốc</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-amber-400 font-bold">F / E • 1-5</span>
-                    <span class="text-slate-300">Cướp xe / Vào cửa hàng • Đổi vũ khí</span>
-                </div>
-                <div class="flex items-center gap-2 sm:col-span-2">
-                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-emerald-400 font-bold">MẸO SỞ HỮU XE & CAMERA</span>
-                    <span class="text-slate-300">Cắt đuôi cảnh sát để sở hữu xe vĩnh viễn • Nhấn <b>C</b> khi lái để đổi góc camera</span>
+                    <span class="px-2 py-1 bg-slate-800 rounded font-mono text-emerald-400 font-bold">BẢN ĐỒ LỚN</span>
+                    <span class="text-slate-300">Nhấn vào Radar góc trái để mở bản đồ thành phố</span>
                 </div>
             </div>
 
             <button id="btn-start" class="w-full py-4 px-8 rounded-2xl font-gta text-xl font-bold tracking-wider uppercase bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 shadow-lg shadow-orange-500/30 transition transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                 VÀO THÀNH PHỐ NGAY
             </button>
+        </div>
+    </div>
+
+    <!-- Modal Bản Đồ Thành Phố Toàn Cảnh (Mở khi nhấn vào Minimap) -->
+    <div id="fullmap-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-3 sm:p-6 text-white">
+        <div class="max-w-2xl w-full bg-slate-900/95 border-2 border-slate-700 rounded-3xl p-4 sm:p-5 shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2.5 mb-3">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400">GPS NAVIGATION</span>
+                    <h2 class="font-gta text-xl sm:text-2xl font-bold text-white">BẢN ĐỒ THÀNH PHỐ GRAND THEFT CITY</h2>
+                </div>
+                <button id="btn-close-map" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold transition cursor-pointer">✕</button>
+            </div>
+            <div class="relative w-full aspect-square max-h-[62vh] mx-auto rounded-2xl overflow-hidden border-2 border-slate-700 bg-slate-950">
+                <canvas id="fullmap-canvas" class="w-full h-full block"></canvas>
+            </div>
+            <div class="mt-3 flex flex-wrap justify-center gap-3 text-[11px] text-slate-300">
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span> Bạn</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-sky-400 inline-block"></span> Nhà 2 Tầng & Gara</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Ammu-Nation</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-fuchsia-500 inline-block"></span> Neon Bar</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> 24/7 Shop / Xe của bạn</span>
+            </div>
         </div>
     </div>
 
@@ -269,6 +250,11 @@
                         <div id="hud-weapon-name" class="font-gta text-xs sm:text-sm font-bold text-amber-400 uppercase">Tay không</div>
                         <div id="hud-weapon-ammo" class="text-[11px] font-mono text-slate-300">∞</div>
                     </div>
+                    <!-- Đồng hồ Thời gian Ngày/Đêm -->
+                    <div class="px-2.5 py-1.5 rounded-xl bg-slate-900/85 border border-slate-700/80 backdrop-blur-sm shadow-lg text-center">
+                        <div id="hud-clock" class="font-gta text-xs sm:text-sm font-bold text-sky-300">08:00</div>
+                        <div id="hud-day-icon" class="text-[10px] leading-none">☀️</div>
+                    </div>
                     <!-- Nút bật/tắt âm thanh -->
                     <button id="btn-audio" class="pointer-events-auto w-9 h-9 rounded-xl bg-slate-900/85 border border-slate-700 hover:border-amber-400 text-white flex items-center justify-center shadow-lg transition cursor-pointer" title="Bật/Tắt Âm Thanh">
                         <span id="audio-icon" class="text-base">🔊</span>
@@ -345,76 +331,126 @@
 
         <!-- Thanh dưới cùng: Minimap radar + Thanh vũ khí + Đồng hồ tốc độ -->
         <div class="flex justify-between items-end gap-2">
-            <!-- Radar Minimap (Góc dưới bên trái) -->
-            <div id="minimap-wrap" class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-slate-950/90 border-4 border-slate-700/90 shadow-2xl overflow-hidden shrink-0">
+            <!-- Radar Minimap (Nhấn vào để mở Bản đồ lớn) -->
+            <div id="minimap-wrapper" class="pointer-events-auto cursor-pointer relative w-28 h-28 sm:w-40 sm:h-40 rounded-full bg-slate-950/90 border-4 border-slate-700/90 hover:border-amber-400 shadow-2xl overflow-hidden shrink-0 transition" title="Nhấn để mở Bản đồ Thành phố">
                 <canvas id="minimap-canvas" class="w-full h-full block"></canvas>
-                <div class="radar-label absolute bottom-1 inset-x-0 text-center text-[9px] font-bold tracking-widest text-slate-400 uppercase pointer-events-none">RADAR</div>
+                <div class="absolute bottom-1 inset-x-0 text-center text-[8px] sm:text-[9px] font-bold tracking-widest text-amber-300 uppercase pointer-events-none">
+                    MAP • RADAR
+                </div>
             </div>
 
-            <!-- Thanh chọn nhanh 5 ô vũ khí (Giữa dưới) -->
-            <div id="weapon-bar" class="hidden sm:flex items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800/90 backdrop-blur-sm">
-                <div data-slot="0" class="w-12 h-12 rounded-xl border-2 border-amber-400 bg-slate-800/90 flex flex-col items-center justify-center text-[10px] text-white font-bold">
+            <!-- Thanh chọn nhanh 5 ô vũ khí (Hỗ trợ chạm trên cả điện thoại & PC) -->
+            <div id="weapon-bar" class="pointer-events-auto flex items-center gap-1 sm:gap-1.5 bg-slate-950/80 p-1 sm:p-1.5 rounded-2xl border border-slate-800/90 backdrop-blur-sm">
+                <div data-slot="0" class="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-amber-400 bg-slate-800/90 flex flex-col items-center justify-center text-[10px] text-white font-bold">
                     <span>1</span><span>👊</span>
                 </div>
-                <div data-slot="1" class="w-12 h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
+                <div data-slot="1" class="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
                     <span>2</span><span>🏏</span>
                 </div>
-                <div data-slot="2" class="w-12 h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
+                <div data-slot="2" class="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
                     <span>3</span><span>🔫</span>
                 </div>
-                <div data-slot="3" class="w-12 h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
+                <div data-slot="3" class="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
                     <span>4</span><span>🔥</span>
                 </div>
-                <div data-slot="4" class="w-12 h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
+                <div data-slot="4" class="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-400 font-bold">
                     <span>5</span><span>💥</span>
                 </div>
             </div>
 
             <!-- Đồng hồ tốc độ & trạng thái (Góc dưới bên phải) -->
             <div class="flex flex-col items-end gap-1.5">
-                <div id="speedometer" class="hidden px-4 py-2 rounded-2xl bg-slate-900/85 border border-slate-700/80 backdrop-blur-sm shadow-lg text-right">
+                <div id="speedometer" class="hidden px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl bg-slate-900/85 border border-slate-700/80 backdrop-blur-sm shadow-lg text-right">
                     <div class="flex items-baseline justify-end gap-1.5">
-                        <span id="speed-val" class="font-gta text-3xl sm:text-4xl font-bold text-amber-400">0</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase">KM/H</span>
+                        <span id="speed-val" class="font-gta text-2xl sm:text-4xl font-bold text-amber-400">0</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase">KM/H</span>
                     </div>
                     <div class="flex items-center justify-end gap-1.5">
-                        <span id="owned-car-badge" class="hidden px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/50 text-[10px] font-bold text-emerald-300 uppercase">XE CỦA BẠN</span>
-                        <span id="vehicle-name" class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Sedan</span>
+                        <span id="owned-car-badge" class="hidden px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/50 text-[9px] font-bold text-emerald-300 uppercase">XE CỦA BẠN</span>
+                        <span id="vehicle-name" class="text-[10px] sm:text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Sedan</span>
                     </div>
-                </div>
-                <div class="hidden lg:block px-3 py-1 rounded-xl bg-slate-950/75 border border-slate-800/80 text-[10px] text-slate-300">
-                    <b class="text-amber-400">C</b> Đổi góc nhìn xe • <b class="text-amber-400">Space</b> Nhảy/Phanh • <b class="text-amber-400">Chuột trái</b> Bắn/Đánh
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Điều khiển cảm ứng: joystick trái; nhảy và tương tác bên phải -->
-    <div id="mobile-controls" class="hidden fixed bottom-3 inset-x-3 z-30 items-end justify-between pointer-events-none md:hidden">
-        <div id="onfoot-left" class="flex flex-col items-center gap-3 pointer-events-auto">
-            <div id="mobile-joystick" aria-label="Joystick di chuyển"><div id="joystick-knob"></div></div>
-        </div>
-        <div id="onfoot-right" class="flex flex-col items-center gap-2 pointer-events-auto">
-            <button id="m-attack" class="touch-btn px-3 h-11 text-xs border-rose-400 text-rose-300">ĐÁNH</button>
-            <button id="m-jump" class="touch-btn text-xs border-sky-400 text-sky-300">NHẢY</button>
-            <button id="m-action" class="touch-btn text-xs border-amber-400 text-amber-300">TƯƠNG TÁC</button>
-        </div>
-        <div id="drive-steer" class="drive-only hidden flex-col gap-2 pointer-events-auto">
-            <div class="flex gap-2">
-                <button id="m-turn-left" class="touch-btn" aria-label="Quẹo trái">◀</button>
-                <button id="m-turn-right" class="touch-btn" aria-label="Quẹo phải">▶</button>
+    <!-- Vùng vuốt cảm ứng xoay góc nhìn xung quanh trên màn hình -->
+    <div id="touch-look-zone" class="hidden fixed inset-0 z-10 touch-none"></div>
+
+    <!-- Bộ điều khiển cảm ứng chuyên dụng cho ĐI BỘ (Màn hình ngang) -->
+    <div id="mobile-foot-controls" class="hidden fixed inset-0 z-30 pointer-events-none">
+        <!-- Bên trái: Nút Chạy (Sprint) nằm ngay phía trên Joystick di chuyển -->
+        <div class="fixed left-5 bottom-32 sm:left-8 sm:bottom-36 flex flex-col items-center gap-3 pointer-events-auto">
+            <button id="m-sprint" class="w-14 h-14 rounded-full bg-slate-900/80 border-2 border-amber-400/80 text-amber-300 font-gta text-xs font-bold shadow-lg active:bg-amber-400 active:text-slate-950 flex flex-col items-center justify-center touch-manipulation">
+                <span>⚡</span>
+                <span>CHẠY</span>
+            </button>
+            <!-- Joystick Di Chuyển 360° -->
+            <div id="joystick-base" class="relative w-28 h-28 rounded-full bg-slate-950/65 border-2 border-white/30 backdrop-blur-xs flex items-center justify-center touch-none shadow-2xl">
+                <div id="joystick-stick" class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-white shadow-lg pointer-events-none"></div>
             </div>
         </div>
-        <div id="drive-throttle" class="drive-only hidden flex-col gap-2 pointer-events-auto items-end">
-            <button id="m-forward" class="touch-btn" aria-label="Tiến">▲</button>
-            <button id="m-reverse" class="touch-btn" aria-label="Lùi">▼</button>
+
+        <!-- Bên phải: Nút Tương Tác TO ở góc phải, bên trái nó là Nút Bắn/Đánh, phía trên là Nút Nhảy -->
+        <div class="fixed right-5 bottom-24 sm:right-8 sm:bottom-28 flex items-end gap-3.5 pointer-events-auto">
+            <!-- Bên trái nút tương tác: Nút Bắn hoặc Đánh -->
+            <button id="m-attack" class="w-16 h-16 rounded-full bg-rose-600/85 border-2 border-rose-300 text-white font-gta text-xs font-bold shadow-xl active:scale-90 transition flex flex-col items-center justify-center touch-manipulation">
+                <span class="text-lg leading-none">🎯</span>
+                <span>BẮN/ĐÁNH</span>
+            </button>
+
+            <!-- Cột phải: Phía trên là Nút Nhảy, phía dưới là Nút Tương Tác TO -->
+            <div class="flex flex-col items-center gap-3">
+                <button id="m-jump" class="w-15 h-15 rounded-full bg-sky-600/85 border-2 border-sky-300 text-white font-gta text-xs font-bold shadow-xl active:scale-90 transition flex flex-col items-center justify-center touch-manipulation">
+                    <span class="text-base leading-none">⬆️</span>
+                    <span>NHẢY</span>
+                </button>
+                <button id="m-interact" class="w-22 h-22 rounded-full bg-amber-500/90 border-4 border-white text-slate-950 font-gta text-xs font-extrabold shadow-2xl shadow-amber-500/40 active:scale-90 transition flex flex-col items-center justify-center touch-manipulation">
+                    <span class="text-2xl leading-none">🚪</span>
+                    <span>TƯƠNG TÁC</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bộ điều khiển cảm ứng chuyên dụng cho LÁI XE (Màn hình ngang) -->
+    <div id="mobile-drive-controls" class="hidden fixed inset-0 z-30 pointer-events-none">
+        <!-- Bên trái: Hai nút quành Trái / Phải -->
+        <div class="fixed left-5 bottom-32 sm:left-8 sm:bottom-36 flex items-center gap-3 pointer-events-auto">
+            <button id="m-steer-left" class="w-20 h-20 rounded-2xl bg-slate-900/85 border-2 border-white/40 text-white text-3xl font-bold shadow-xl active:bg-amber-400 active:text-slate-950 flex items-center justify-center touch-manipulation">
+                ◀
+            </button>
+            <button id="m-steer-right" class="w-20 h-20 rounded-2xl bg-slate-900/85 border-2 border-white/40 text-white text-3xl font-bold shadow-xl active:bg-amber-400 active:text-slate-950 flex items-center justify-center touch-manipulation">
+                ▶
+            </button>
+        </div>
+
+        <!-- Bên phải: Nút Xuống Xe ở trên + Hai nút hình chữ nhật nằm ngang Tiến / Lùi -->
+        <div class="fixed right-5 bottom-24 sm:right-8 sm:bottom-28 flex flex-col items-end gap-3 pointer-events-auto">
+            <div class="flex gap-2">
+                <button id="m-cam-toggle" class="px-3.5 py-2.5 rounded-xl bg-slate-900/85 border border-sky-400/70 text-sky-300 font-gta text-xs font-bold shadow-lg active:scale-95 touch-manipulation">
+                    🎥 GÓC NHÌN
+                </button>
+                <button id="m-exit-car" class="px-4 py-2.5 rounded-xl bg-amber-500/90 border-2 border-white text-slate-950 font-gta text-xs font-extrabold shadow-lg active:scale-95 touch-manipulation">
+                    🚪 XUỐNG XE
+                </button>
+            </div>
+            <!-- Hai nút hình chữ nhật nằm ngang Tiến / Lùi -->
+            <div class="flex items-center gap-3">
+                <button id="m-reverse" class="w-24 h-16 rounded-2xl bg-rose-600/85 border-2 border-rose-300 text-white font-gta text-sm font-bold shadow-xl active:scale-95 flex items-center justify-center touch-manipulation">
+                    LÙI
+                </button>
+                <button id="m-gas" class="w-28 h-16 rounded-2xl bg-emerald-500/90 border-2 border-emerald-200 text-slate-950 font-gta text-base font-extrabold shadow-xl active:scale-95 flex items-center justify-center touch-manipulation">
+                    TIẾN
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
         /**
          * ============================================================================
-         * GRAND THEFT CITY 3D - COMPLETE SANDBOX ENGINE
+         * GRAND THEFT CITY 3D - COMPLETE SANDBOX ENGINE (MOBILE & DESKTOP)
          * ============================================================================
          */
 
@@ -433,12 +469,15 @@
 
         const WORLD_LIMIT = CONFIG.GRID_RADIUS * CONFIG.BLOCK_SIZE;
 
-        // --- HỆ THỐNG ÂM THANH TỔNG HỢP (WEB AUDIO API) ---
+        // --- HỆ THỐNG ÂM THANH TỔNG HỢP SIÊU XE & ĐÔ THỊ (WEB AUDIO API) ---
         class SoundEngine {
             constructor() {
                 this.ctx = null;
                 this.enabled = true;
-                this.engineOsc = null;
+                this.engineOsc1 = null;
+                this.engineOsc2 = null;
+                this.engineSubOsc = null;
+                this.engineFilter = null;
                 this.engineGain = null;
                 this.sirenOsc = null;
                 this.sirenGain = null;
@@ -451,21 +490,36 @@
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 this.ctx = new AudioCtx();
 
-                // Tiếng động cơ xe
-                this.engineOsc = this.ctx.createOscillator();
+                // Động cơ siêu xe V10/V12 đa âm sắc (Harmonic Dual Sawtooth + Sub Bass)
+                this.engineOsc1 = this.ctx.createOscillator();
+                this.engineOsc2 = this.ctx.createOscillator();
+                this.engineSubOsc = this.ctx.createOscillator();
+                this.engineFilter = this.ctx.createBiquadFilter();
                 this.engineGain = this.ctx.createGain();
-                this.engineOsc.type = 'sawtooth';
-                this.engineOsc.frequency.value = 50;
+
+                this.engineOsc1.type = 'sawtooth';
+                this.engineOsc2.type = 'sawtooth';
+                this.engineSubOsc.type = 'triangle';
+
+                this.engineOsc1.frequency.value = 55;
+                this.engineOsc2.frequency.value = 82.5;
+                this.engineSubOsc.frequency.value = 27.5;
+
+                this.engineFilter.type = 'lowpass';
+                this.engineFilter.frequency.value = 280;
+                this.engineFilter.Q.value = 4.2;
+
                 this.engineGain.gain.value = 0;
 
-                const filter = this.ctx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.value = 210;
-
-                this.engineOsc.connect(filter);
-                filter.connect(this.engineGain);
+                this.engineOsc1.connect(this.engineFilter);
+                this.engineOsc2.connect(this.engineFilter);
+                this.engineSubOsc.connect(this.engineFilter);
+                this.engineFilter.connect(this.engineGain);
                 this.engineGain.connect(this.ctx.destination);
-                this.engineOsc.start();
+
+                this.engineOsc1.start();
+                this.engineOsc2.start();
+                this.engineSubOsc.start();
 
                 // Tiếng còi hụ cảnh sát
                 this.sirenOsc = this.ctx.createOscillator();
@@ -488,7 +542,7 @@
                 return this.enabled;
             }
 
-            update(dt, inVehicle, speedRatio, wantedLevel, isPaused, isWalking, isSprinting) {
+            update(dt, inVehicle, speedRatio, wantedLevel, isPaused, isWalking, isSprinting, isBicycle = false) {
                 if (!this.ctx || !this.enabled || isPaused) {
                     if (this.ctx) {
                         this.engineGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
@@ -497,12 +551,20 @@
                     return;
                 }
                 if (this.ctx.state === 'suspended') this.ctx.resume();
-                // Động cơ (Tăng âm lượng & độ gầm rú sống động khi lái xe)
-                if (inVehicle) {
-                    const absRatio = Math.abs(speedRatio);
-                    const targetFreq = 52 + absRatio * 145;
-                    this.engineOsc.frequency.setTargetAtTime(targetFreq, this.ctx.currentTime, 0.05);
-                    this.engineGain.gain.setTargetAtTime(0.16 + absRatio * 0.18, this.ctx.currentTime, 0.05);
+
+                // Động cơ siêu xe uy lực, gầm rú và sang số thực tế
+                if (inVehicle && !isBicycle) {
+                    const absRatio = Math.min(1, Math.abs(speedRatio));
+                    // Mô phỏng 5 cấp số siêu xe (RPM tăng vọt rồi sang số)
+                    const gear = Math.min(5, Math.floor(absRatio * 5) + 1);
+                    const gearProgress = (absRatio * 5) % 1;
+                    const baseRpm = 58 + (gearProgress * 125) + (gear * 18);
+
+                    this.engineOsc1.frequency.setTargetAtTime(baseRpm, this.ctx.currentTime, 0.04);
+                    this.engineOsc2.frequency.setTargetAtTime(baseRpm * 1.498, this.ctx.currentTime, 0.04);
+                    this.engineSubOsc.frequency.setTargetAtTime(baseRpm * 0.5, this.ctx.currentTime, 0.04);
+                    this.engineFilter.frequency.setTargetAtTime(240 + absRatio * 980, this.ctx.currentTime, 0.05);
+                    this.engineGain.gain.setTargetAtTime(0.18 + absRatio * 0.16, this.ctx.currentTime, 0.04);
                 } else {
                     this.engineGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.08);
                 }
@@ -691,6 +753,7 @@
             started: false,
             gameOver: false,
             shopOpen: false,
+            mapOpen: false,
             cash: 1800,
             carsStolen: 0,
             wantedLevel: 0,
@@ -702,37 +765,46 @@
             bustTimer: 0,
             camYaw: Math.PI,
             camPitch: 0.32,
-            driveCamMode: 0, // 0: Góc nhìn tiêu chuẩn sau đuôi xe, 1: Góc nhìn xa bao quát
+            driveCamMode: 0,
             isMouseDown: false,
             trafficLightTimer: 0,
-            trafficPhase: 0 // 0: Xanh trục Z / Đỏ trục X, 1: Vàng, 2: Đỏ trục Z / Xanh trục X
+            trafficPhase: 0,
+            // Chu kỳ Ngày / Đêm: 1 tiếng trong game = 5 phút thực tế (300 giây)
+            // 24 tiếng trong game = 120 phút thực tế (7200 giây) -> timeSpeed = 1 / 300 giờ/giây
+            gameHour: 8.5, // Bắt đầu lúc 08:30 sáng
+            isIndoors: false,
+            currentHouseBounds: null
+        };
+
+        const mobileInput = {
+            joyX: 0,
+            joyY: 0,
+            sprint: false,
+            gas: false,
+            reverse: false,
+            steerLeft: false,
+            steerRight: false
         };
 
         const keys = {};
         const colliders = [];       // Tòa nhà & vật cản cứng
         const hydrants = [];        // Trụ cứu hỏa có thể tông gãy phun nước
         const trafficBulbs = [];    // Đèn giao thông 3 màu cập nhật động
-        const stores = [];          // 3 cửa hàng tương tác (Ammu-Nation, Neon Bar, 24/7 Shop)
+        const stores = [];          // 3 cửa hàng + nội thất nhà chính tương tác
         const pedestrians = [];     // NPC đi bộ ngoài đường + chủ quán
         const vehicles = [];        // Phương tiện giao thông & cảnh sát
         const particles = [];       // Hiệu ứng hạt (tia lửa, khói, nước phun)
         const tracers = [];         // Tia đạn bắn
         const roadCoords = [];
+        const streetLampBulbs = []; // Bóng đèn đường bật sáng ban đêm
+        const nightWindowMats = []; // Vật liệu cửa sổ tòa nhà lớn phát sáng ban đêm
+        let playerHouseInfo = null; // Thông tin ngôi nhà 2 tầng & gara của nhân vật chính
+        let sunMesh = null, moonMesh = null;
 
         for (let i = -CONFIG.GRID_RADIUS; i <= CONFIG.GRID_RADIUS; i++) {
             roadCoords.push(i * CONFIG.BLOCK_SIZE);
         }
-
-        // --- DANH SÁCH VŨ KHÍ & PHỤ KIỆN ---
-        const WEAPONS = [
-            { id: 'fists', name: 'Tay không', icon: '👊', damage: 22, range: 2.6, cooldown: 0.42, auto: false, owned: true, ammo: Infinity, price: 0, desc: 'Đấm cận chiến cơ bản' },
-            { id: 'bat', name: 'Gậy bóng chày', icon: '🏏', damage: 45, range: 3.3, cooldown: 0.5, auto: false, owned: false, ammo: Infinity, price: 250, desc: 'Sát thương cận chiến mạnh, đẩy lùi mục tiêu' },
-            { id: 'pistol', name: 'Súng lục 9mm', icon: '🔫', damage: 38, range: 65, cooldown: 0.32, auto: false, owned: false, ammo: 0, maxAmmo: 60, price: 600, desc: 'Chính xác cao, kèm 60 viên đạn' },
-            { id: 'smg', name: 'Tiểu liên SMG', icon: '🔥', damage: 24, range: 58, cooldown: 0.11, auto: true, owned: false, ammo: 0, maxAmmo: 150, price: 1350, desc: 'Bắn liên thanh tốc độ cao, kèm 150 viên' },
-            { id: 'shotgun', name: 'Súng săn Shotgun', icon: '💥', damage: 85, range: 34, cooldown: 0.78, auto: false, owned: false, ammo: 0, maxAmmo: 32, price: 1800, desc: 'Bắn chùm đạn uy lực cực lớn tầm gần' }
-        ];
-
-        // --- TẠO MÔ HÌNH NHÂN VẬT 3D CÓ KHỚP NỐI ĐẦY ĐỦ (ĐẦU, MẶT MŨI, TAY, CHÂN, PHỤ KIỆN) ---
+        // --- TẠO MÔ HÌNH NHÂN VẬT 3D BO CONG MỀM MẠI (ĐẦU, MẶT MŨI, TAY, CHÂN, PHỤ KIỆN) ---
         function createArticulatedCharacter(options = {}) {
             const {
                 shirtColor = 0xf97316,
@@ -748,71 +820,75 @@
 
             const root = new THREE.Group();
 
-            // Khung xương hông (Hip pivot) để xoay toàn thân khi ngã/văng
+            // Khung xương hông (Hip pivot)
             const bodyPivot = new THREE.Group();
             bodyPivot.position.y = 0.85;
             root.add(bodyPivot);
 
-            // 1. Thân trên (Torso)
+            // 1. Thân trên bo tròn mềm mại (Torso)
             const torso = new THREE.Mesh(
-                new THREE.BoxGeometry(0.68, 0.82, 0.36),
-                new THREE.MeshStandardMaterial({ color: shirtColor, roughness: 0.7 })
+                new THREE.CylinderGeometry(0.32, 0.28, 0.82, 14),
+                new THREE.MeshStandardMaterial({ color: shirtColor, roughness: 0.65 })
             );
+            torso.scale.set(1.08, 1, 0.62);
             torso.position.y = 0.42;
             torso.castShadow = true;
             bodyPivot.add(torso);
 
-            // Áo giáp chống đạn (Phụ kiện)
+            // Áo giáp chống đạn bo cong
             const armorMesh = new THREE.Mesh(
-                new THREE.BoxGeometry(0.74, 0.68, 0.42),
+                new THREE.CylinderGeometry(0.35, 0.31, 0.66, 14),
                 new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4, metalness: 0.5 })
             );
+            armorMesh.scale.set(1.12, 1, 0.68);
             armorMesh.position.y = 0.44;
             armorMesh.visible = hasArmor;
             bodyPivot.add(armorMesh);
 
-            // Ba lô sau lưng (Phụ kiện)
+            // Ba lô sau lưng bo tròn
             const backpackMesh = new THREE.Mesh(
-                new THREE.BoxGeometry(0.52, 0.62, 0.28),
+                new THREE.CylinderGeometry(0.24, 0.24, 0.56, 12),
                 new THREE.MeshStandardMaterial({ color: 0x3f6212, roughness: 0.8 })
             );
-            backpackMesh.position.set(0, 0.44, -0.3);
+            backpackMesh.scale.set(1.05, 1, 0.65);
+            backpackMesh.position.set(0, 0.44, -0.26);
             backpackMesh.visible = hasBackpack;
             bodyPivot.add(backpackMesh);
 
-            // 2. Đầu & Khuôn mặt chi tiết (Head & Face)
+            // 2. Đầu & Khuôn mặt bo tròn tự nhiên (Head & Face)
             const headGroup = new THREE.Group();
             headGroup.position.y = 1.08;
             bodyPivot.add(headGroup);
 
             const headMesh = new THREE.Mesh(
-                new THREE.BoxGeometry(0.44, 0.44, 0.44),
-                new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.6 })
+                new THREE.SphereGeometry(0.24, 16, 16),
+                new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.55 })
             );
+            headMesh.scale.set(0.95, 1.05, 0.98);
             headMesh.castShadow = true;
             headGroup.add(headMesh);
 
-            // Tóc
+            // Tóc bo vòm đầu
             const hairMesh = new THREE.Mesh(
-                new THREE.BoxGeometry(0.47, 0.16, 0.47),
+                new THREE.SphereGeometry(0.25, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.52),
                 new THREE.MeshStandardMaterial({ color: hairColor })
             );
-            hairMesh.position.y = 0.2;
+            hairMesh.position.y = 0.03;
             headGroup.add(hairMesh);
 
-            // Mũ lưỡi trai (Phụ kiện)
+            // Mũ lưỡi trai bo cong
             const capGroup = new THREE.Group();
             const capCrown = new THREE.Mesh(
-                new THREE.BoxGeometry(0.48, 0.17, 0.48),
+                new THREE.SphereGeometry(0.255, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5),
                 new THREE.MeshStandardMaterial({ color: capColor })
             );
-            capCrown.position.y = 0.22;
+            capCrown.position.y = 0.03;
             capGroup.add(capCrown);
             const capVisor = new THREE.Mesh(
-                new THREE.BoxGeometry(0.44, 0.05, 0.26),
+                new THREE.CylinderGeometry(0.22, 0.24, 0.035, 14, 1, false, -Math.PI * 0.4, Math.PI * 0.8),
                 new THREE.MeshStandardMaterial({ color: capColor })
             );
-            capVisor.position.set(0, 0.16, 0.32);
+            capVisor.position.set(0, 0.06, 0.14);
             capGroup.add(capVisor);
             capGroup.visible = hasCap;
             headGroup.add(capGroup);
@@ -821,56 +897,66 @@
             const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
             const whiteEyeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-            [-0.1, 0.1].forEach(ex => {
-                const eyeWhite = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.06, 0.02), whiteEyeMat);
-                eyeWhite.position.set(ex, 0.04, 0.222);
+            [-0.085, 0.085].forEach(ex => {
+                const eyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.038, 10, 10), whiteEyeMat);
+                eyeWhite.scale.set(1.1, 0.8, 0.5);
+                eyeWhite.position.set(ex, 0.03, 0.215);
                 headGroup.add(eyeWhite);
 
-                const pupil = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.05, 0.025), eyeMat);
-                pupil.position.set(ex, 0.04, 0.225);
+                const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), eyeMat);
+                pupil.position.set(ex, 0.03, 0.228);
                 headGroup.add(pupil);
 
-                const brow = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.025, 0.02), new THREE.MeshBasicMaterial({ color: hairColor }));
-                brow.position.set(ex, 0.1, 0.225);
+                const brow = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.02, 0.02), new THREE.MeshBasicMaterial({ color: hairColor }));
+                brow.position.set(ex, 0.085, 0.22);
                 headGroup.add(brow);
             });
 
-            // Mũi
+            // Mũi bo tròn
             const nose = new THREE.Mesh(
-                new THREE.BoxGeometry(0.06, 0.09, 0.07),
+                new THREE.SphereGeometry(0.032, 8, 8),
                 new THREE.MeshStandardMaterial({ color: skinColor })
             );
-            nose.position.set(0, -0.02, 0.24);
+            nose.scale.set(0.85, 1.2, 1.1);
+            nose.position.set(0, -0.02, 0.235);
             headGroup.add(nose);
 
             // Miệng
             const mouth = new THREE.Mesh(
-                new THREE.BoxGeometry(0.14, 0.03, 0.02),
+                new THREE.BoxGeometry(0.11, 0.024, 0.02),
                 new THREE.MeshBasicMaterial({ color: 0x991b1b })
             );
-            mouth.position.set(0, -0.11, 0.224);
+            mouth.position.set(0, -0.095, 0.215);
             headGroup.add(mouth);
 
-            // Kính râm (Phụ kiện)
+            // Kính râm bo góc
             const glassesGroup = new THREE.Group();
             const glassMat = new THREE.MeshStandardMaterial({ color: 0x09090b, metalness: 0.8, roughness: 0.1 });
-            const lensL = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.09, 0.04), glassMat);
-            lensL.position.set(-0.1, 0.04, 0.235);
-            const lensR = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.09, 0.04), glassMat);
-            lensR.position.set(0.1, 0.04, 0.235);
-            const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.025, 0.03), glassMat);
-            bridge.position.set(0, 0.05, 0.232);
+            const lensL = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.03, 12), glassMat);
+            lensL.rotation.x = Math.PI / 2;
+            lensL.position.set(-0.085, 0.03, 0.228);
+            const lensR = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.03, 12), glassMat);
+            lensR.rotation.x = Math.PI / 2;
+            lensR.position.set(0.085, 0.03, 0.228);
+            const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.02, 0.025), glassMat);
+            bridge.position.set(0, 0.04, 0.225);
             glassesGroup.add(lensL, lensR, bridge);
             glassesGroup.visible = hasSunglasses;
             headGroup.add(glassesGroup);
 
-            // 3. Hai Cánh Tay có khớp vai & khuỷu tay (Left & Right Arms)
+            // 3. Hai Cánh Tay trụ tròn mềm mại
             function buildArm(side) {
                 const shoulderPivot = new THREE.Group();
-                shoulderPivot.position.set(side * 0.46, 0.78, 0);
+                shoulderPivot.position.set(side * 0.42, 0.78, 0);
+
+                const shoulderJoint = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.105, 10, 10),
+                    new THREE.MeshStandardMaterial({ color: shirtColor })
+                );
+                shoulderPivot.add(shoulderJoint);
 
                 const upperArm = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.22, 0.4, 0.22),
+                    new THREE.CylinderGeometry(0.095, 0.085, 0.38, 12),
                     new THREE.MeshStandardMaterial({ color: shirtColor })
                 );
                 upperArm.position.y = -0.18;
@@ -878,11 +964,11 @@
                 shoulderPivot.add(upperArm);
 
                 const elbowPivot = new THREE.Group();
-                elbowPivot.position.y = -0.38;
+                elbowPivot.position.y = -0.37;
                 shoulderPivot.add(elbowPivot);
 
                 const foreArm = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.19, 0.36, 0.19),
+                    new THREE.CylinderGeometry(0.082, 0.072, 0.35, 12),
                     new THREE.MeshStandardMaterial({ color: skinColor })
                 );
                 foreArm.position.y = -0.16;
@@ -890,10 +976,10 @@
                 elbowPivot.add(foreArm);
 
                 const hand = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.18, 0.14, 0.18),
+                    new THREE.SphereGeometry(0.085, 10, 10),
                     new THREE.MeshStandardMaterial({ color: skinColor })
                 );
-                hand.position.y = -0.36;
+                hand.position.y = -0.35;
                 elbowPivot.add(hand);
 
                 return { shoulderPivot, elbowPivot, hand };
@@ -944,13 +1030,13 @@
             gunGroup.visible = false;
             weaponHolder.add(gunGroup);
 
-            // 5. Hai Chân có khớp hông & đầu gối + giày (Left & Right Legs)
+            // 5. Hai Chân trụ tròn bo gối & giày
             function buildLeg(side) {
                 const hipPivot = new THREE.Group();
-                hipPivot.position.set(side * 0.19, 0, 0);
+                hipPivot.position.set(side * 0.17, 0, 0);
 
                 const thigh = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.26, 0.44, 0.28),
+                    new THREE.CylinderGeometry(0.125, 0.11, 0.44, 12),
                     new THREE.MeshStandardMaterial({ color: pantsColor })
                 );
                 thigh.position.y = -0.22;
@@ -962,7 +1048,7 @@
                 hipPivot.add(kneePivot);
 
                 const shin = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.23, 0.36, 0.25),
+                    new THREE.CylinderGeometry(0.108, 0.095, 0.36, 12),
                     new THREE.MeshStandardMaterial({ color: pantsColor })
                 );
                 shin.position.y = -0.18;
@@ -970,9 +1056,11 @@
                 kneePivot.add(shin);
 
                 const shoe = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.25, 0.12, 0.36),
+                    new THREE.CylinderGeometry(0.11, 0.12, 0.34, 12),
                     new THREE.MeshStandardMaterial({ color: 0xf8fafc })
                 );
+                shoe.rotation.x = Math.PI / 2;
+                shoe.scale.set(1, 1, 0.55);
                 shoe.position.set(0, -0.36, 0.05);
                 kneePivot.add(shoe);
 
@@ -1035,6 +1123,15 @@
         player.mesh.position.copy(player.pos);
         scene.add(player.mesh);
 
+        // --- DANH SÁCH VŨ KHÍ ---
+        const WEAPONS = [
+            { id: 'fists', name: 'Tay không', icon: '👊', damage: 22, range: 2.5, cooldown: 0.42, ammo: Infinity, owned: true, auto: false },
+            { id: 'bat', name: 'Gậy bóng chày', icon: '🏏', damage: 45, range: 3.1, cooldown: 0.55, ammo: Infinity, owned: false, auto: false },
+            { id: 'pistol', name: 'Súng lục 9mm', icon: '🔫', damage: 38, range: 75, cooldown: 0.28, ammo: 0, maxAmmo: 60, owned: false, auto: false },
+            { id: 'smg', name: 'Tiểu liên SMG', icon: '🔥', damage: 24, range: 68, cooldown: 0.1, ammo: 0, maxAmmo: 150, owned: false, auto: true },
+            { id: 'shotgun', name: 'Súng săn Shotgun', icon: '💥', damage: 95, range: 36, cooldown: 0.78, ammo: 0, maxAmmo: 32, owned: false, auto: false }
+        ];
+
         function updatePlayerVisualEquipment() {
             const ud = player.mesh.userData;
             ud.capGroup.visible = player.accessories.cap;
@@ -1043,21 +1140,49 @@
             ud.armorMesh.visible = player.armor > 0;
 
             const w = WEAPONS[player.weaponIndex];
-            ud.batMesh.visible = w.id === 'bat';
+            ud.batMesh.visible = (w.id === 'bat');
             ud.gunGroup.visible = (w.id === 'pistol' || w.id === 'smg' || w.id === 'shotgun');
+            if (w.id === 'smg') ud.gunBody.scale.set(1.1, 1.1, 1.35);
+            else if (w.id === 'shotgun') ud.gunBody.scale.set(1.15, 1.1, 1.75);
+            else ud.gunBody.scale.set(1, 1, 1);
+        }
 
-            if (w.id === 'smg') {
-                ud.gunBody.scale.set(1.1, 1.15, 1.45);
-            } else if (w.id === 'shotgun') {
-                ud.gunBody.scale.set(1.2, 1.1, 1.95);
-            } else {
-                ud.gunBody.scale.set(1, 1, 1);
+        let toastTimeout = null;
+        function showToast(msg) {
+            const el = document.getElementById('toast-msg');
+            el.textContent = msg;
+            el.classList.remove('opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => el.classList.add('opacity-0'), 3400);
+        }
+
+        function requestGamePointerLock() {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen) return;
+            if ('ontouchstart' in window && navigator.maxTouchPoints > 0) return;
+            if (canvas.requestPointerLock && document.pointerLockElement !== canvas) {
+                try {
+                    const p = canvas.requestPointerLock();
+                    if (p && p.catch) p.catch(() => {});
+                } catch (e) {}
             }
         }
 
-        // --- XÂY DỰNG THÀNH PHỐ CHÂN THẬT + 3 CỬA HÀNG TƯƠNG TÁC ---
+        // --- XÂY DỰNG THÀNH PHỐ CHÂN THẬT + NHÀ CHÍNH 2 TẦNG CÓ GARA + 3 CỬA HÀNG ---
         function buildCity() {
             const totalSize = (CONFIG.GRID_RADIUS * 2 + 2) * CONFIG.BLOCK_SIZE;
+
+            // Mặt trời & Mặt trăng trên bầu trời
+            sunMesh = new THREE.Mesh(
+                new THREE.SphereGeometry(14, 20, 20),
+                new THREE.MeshBasicMaterial({ color: 0xfef08a })
+            );
+            scene.add(sunMesh);
+
+            moonMesh = new THREE.Mesh(
+                new THREE.SphereGeometry(10, 20, 20),
+                new THREE.MeshBasicMaterial({ color: 0xe2e8f0 })
+            );
+            scene.add(moonMesh);
 
             // Mặt nền đất tổng thể
             const ground = new THREE.Mesh(
@@ -1127,18 +1252,18 @@
                         scene.add(cw2);
                     }
 
-                    // Đặt trụ đèn giao thông ở góc giao lộ chẵn
-                    if ((ix + iz) % 2 === 0 && Math.abs(rx) < WORLD_LIMIT && Math.abs(rz) < WORLD_LIMIT) {
-                        addTrafficLight(rx + CONFIG.ROAD_WIDTH / 2 + 0.8, rz + CONFIG.ROAD_WIDTH / 2 + 0.8);
+                    if (ix < CONFIG.GRID_RADIUS && iz < CONFIG.GRID_RADIUS) {
+                        addTrafficLight(rx + CONFIG.ROAD_WIDTH / 2 + 1.2, rz + CONFIG.ROAD_WIDTH / 2 + 1.2);
                     }
                 });
             });
 
-            // 3 CỬA HÀNG TƯƠNG TÁC ĐẶC BIỆT Ở CÁC Ô TRUNG TÂM
+            // 3 CỬA HÀNG TƯƠNG TÁC + NGÔI NHÀ 2 TẦNG CÓ GARA CỦA NHÂN VẬT CHÍNH
             const specialLots = {
-                '0_0': 'gunshop',   // Ngay ô trung tâm gần điểm xuất phát
-                '-1_0': 'bar',      // Quán Bar đối diện bên trái
-                '0_-1': 'gearshop'  // Cửa hàng tiện lợi & phụ kiện phía trên
+                '0_0': 'gunshop',     // Ammu-Nation ngay ô trung tâm
+                '-1_0': 'bar',        // Quán Bar đối diện bên trái
+                '0_-1': 'gearshop',   // Cửa hàng phụ kiện phía trên
+                '-1_-1': 'playerhouse' // Ngôi nhà 2 tầng + Gara của nhân vật chính
             };
 
             const buildingColors = [
@@ -1174,6 +1299,12 @@
                         addBusStop(centerX, centerZ + lotSpan / 2 - 1.4);
                     }
 
+                    // Kiểm tra nếu là ngôi nhà 2 tầng của nhân vật chính
+                    if (specialLots[lotKey] === 'playerhouse') {
+                        buildPlayerTwoStoryHouse(centerX, centerZ);
+                        continue;
+                    }
+
                     // Kiểm tra nếu là 1 trong 3 cửa hàng có thể đi vào bên trong
                     if (specialLots[lotKey]) {
                         buildEnterableStore(specialLots[lotKey], centerX, centerZ, lotSpan);
@@ -1181,19 +1312,18 @@
                     }
 
                     // Công viên cây xanh
-                    const isPark = (Math.abs(gx + gz) % 4 === 1);
-                    if (isPark) {
+                    if (Math.abs(gx) === 2 && Math.abs(gz) === 2) {
                         const grass = new THREE.Mesh(
-                            new THREE.BoxGeometry(lotSpan - 5.5, 0.25, lotSpan - 5.5),
+                            new THREE.BoxGeometry(lotSpan - 4, 0.24, lotSpan - 4),
                             parkMat
                         );
                         grass.position.set(centerX, 0.14, centerZ);
                         grass.receiveShadow = true;
                         scene.add(grass);
 
-                        for (let t = 0; t < 8; t++) {
-                            const tx = centerX + (Math.random() - 0.5) * (lotSpan - 11);
-                            const tz = centerZ + (Math.random() - 0.5) * (lotSpan - 11);
+                        for (let t = 0; t < 7; t++) {
+                            const tx = centerX + (Math.random() - 0.5) * (lotSpan - 12);
+                            const tz = centerZ + (Math.random() - 0.5) * (lotSpan - 12);
                             addTree(tx, tz);
                         }
                         continue;
@@ -1220,7 +1350,6 @@
                         building.receiveShadow = true;
                         scene.add(building);
 
-                        // Viền mái
                         const roof = new THREE.Mesh(
                             new THREE.BoxGeometry(bW + 0.4, 0.8, bD + 0.4),
                             new THREE.MeshStandardMaterial({ color: 0x0f172a })
@@ -1228,9 +1357,10 @@
                         roof.position.set(bx, 0.18 + bH + 0.4, bz);
                         scene.add(roof);
 
-                        // Dải cửa sổ phát sáng
+                        // Dải cửa sổ phát sáng ban đêm trên các tòa nhà lớn
                         if (bH > 20) {
-                            const bandMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe });
+                            const bandMat = new THREE.MeshBasicMaterial({ color: 0x334155 });
+                            nightWindowMats.push(bandMat);
                             for (let wy = 6; wy < bH - 3; wy += 6) {
                                 const band = new THREE.Mesh(new THREE.BoxGeometry(bW + 0.15, 1.0, bD + 0.15), bandMat);
                                 band.position.set(bx, 0.18 + wy, bz);
@@ -1258,6 +1388,193 @@
                     });
                 }
             }
+        }
+
+        // --- XÂY DỰNG NGÔI NHÀ 2 TẦNG CÓ CẦU THANG, NỘI THẤT (TIVI, SOFA, GIƯỜNG) VÀ GARA ĐỂ XE ---
+        function buildPlayerTwoStoryHouse(cx, cz) {
+            const houseX = cx - 6.5;
+            const houseZ = cz - 2.0;
+            const hW = 16;
+            const hD = 15;
+            const floor1H = 4.6;
+            const floor2H = 4.6;
+            const totalH = floor1H + floor2H;
+
+            playerHouseInfo = {
+                center: new THREE.Vector3(cx, 0, cz),
+                minX: houseX - hW / 2 + 0.6,
+                maxX: houseX + hW / 2 - 0.6,
+                minZ: houseZ - hD / 2 + 0.6,
+                maxZ: houseZ + hD / 2 - 0.6,
+                garageCenter: new THREE.Vector3(cx + 8.5, 0, cz - 1.5),
+                garageBounds: {
+                    minX: cx + 3.2,
+                    maxX: cx + 13.8,
+                    minZ: cz - 7.5,
+                    maxZ: cz + 4.5
+                }
+            };
+
+            // Biển hiệu NHÀ CỦA BẠN
+            const homeSign = new THREE.Mesh(
+                new THREE.BoxGeometry(10, 2.0, 0.35),
+                new THREE.MeshBasicMaterial({ map: createNeonSignTexture('SAFEHOUSE & GARAGE', '#0c4a6e', '#38bdf8') })
+            );
+            homeSign.position.set(cx, totalH + 1.4, houseZ + hD / 2 + 0.3);
+            scene.add(homeSign);
+
+            const wallMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.5 });
+            const trimMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4 });
+            const woodMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.6 });
+
+            // Sàn tầng 1 & Sàn tầng 2 (Chừa lỗ cầu thang bên phải)
+            const floor1 = new THREE.Mesh(new THREE.BoxGeometry(hW, 0.25, hD), woodMat);
+            floor1.position.set(houseX, 0.15, houseZ);
+            scene.add(floor1);
+
+            const floor2Left = new THREE.Mesh(new THREE.BoxGeometry(hW - 4.2, 0.35, hD), woodMat);
+            floor2Left.position.set(houseX - 2.1, floor1H, houseZ);
+            scene.add(floor2Left);
+
+            const floor2FrontLanding = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.35, 5.5), woodMat);
+            floor2FrontLanding.position.set(houseX + hW / 2 - 2.1, floor1H, houseZ + hD / 2 - 2.75);
+            scene.add(floor2FrontLanding);
+
+            // Cầu thang bộ nối Tầng 1 lên Tầng 2
+            const stepCount = 12;
+            for (let s = 0; s < stepCount; s++) {
+                const step = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.35, 0.85), woodMat);
+                step.position.set(
+                    houseX + hW / 2 - 2.1,
+                    0.35 + (s / stepCount) * (floor1H - 0.35),
+                    houseZ + 2.2 - (s / stepCount) * 6.5
+                );
+                scene.add(step);
+            }
+
+            // Tường bao 2 tầng (Tường sau, trái, phải và mặt tiền mở cửa rộng)
+            const backWall = new THREE.Mesh(new THREE.BoxGeometry(hW, totalH, 0.6), wallMat);
+            backWall.position.set(houseX, totalH / 2, houseZ - hD / 2);
+            scene.add(backWall);
+            colliders.push({ minX: houseX - hW / 2, maxX: houseX + hW / 2, minZ: houseZ - hD / 2 - 0.4, maxZ: houseZ - hD / 2 + 0.4 });
+
+            [-1, 1].forEach(side => {
+                const sw = new THREE.Mesh(new THREE.BoxGeometry(0.6, totalH, hD), wallMat);
+                sw.position.set(houseX + side * (hW / 2), totalH / 2, houseZ);
+                scene.add(sw);
+                colliders.push({
+                    minX: houseX + side * (hW / 2) - 0.4,
+                    maxX: houseX + side * (hW / 2) + 0.4,
+                    minZ: houseZ - hD / 2,
+                    maxZ: houseZ + hD / 2
+                });
+            });
+
+            // Mặt tiền mở cửa rộng 4.6m
+            const fSeg = (hW - 4.6) / 2;
+            [-1, 1].forEach(side => {
+                const fw = new THREE.Mesh(new THREE.BoxGeometry(fSeg, totalH, 0.6), wallMat);
+                fw.position.set(houseX + side * (hW / 2 - fSeg / 2), totalH / 2, houseZ + hD / 2);
+                scene.add(fw);
+                colliders.push({
+                    minX: houseX + side * (hW / 2 - fSeg / 2) - fSeg / 2,
+                    maxX: houseX + side * (hW / 2 - fSeg / 2) + fSeg / 2,
+                    minZ: houseZ + hD / 2 - 0.4,
+                    maxZ: houseZ + hD / 2 + 0.4
+                });
+            });
+
+            // Mái nhà
+            const roof = new THREE.Mesh(new THREE.BoxGeometry(hW + 0.8, 0.6, hD + 0.8), trimMat);
+            roof.position.set(houseX, totalH + 0.3, houseZ);
+            scene.add(roof);
+
+            // --- NỘI THẤT TẦNG 1: TIVI MÀN HÌNH PHẲNG, GHẾ SOFA, BÀN TRÀ ---
+            const tvStand = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.75, 0.9), trimMat);
+            tvStand.position.set(houseX - 2.5, 0.6, houseZ - hD / 2 + 1.0);
+            scene.add(tvStand);
+
+            const tvScreen = new THREE.Mesh(
+                new THREE.BoxGeometry(3.0, 1.65, 0.14),
+                new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+            );
+            tvScreen.position.set(houseX - 2.5, 1.9, houseZ - hD / 2 + 1.0);
+            scene.add(tvScreen);
+
+            const sofa = new THREE.Mesh(
+                new THREE.BoxGeometry(4.0, 0.9, 1.4),
+                new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.7 })
+            );
+            sofa.position.set(houseX - 2.5, 0.65, houseZ + 0.2);
+            scene.add(sofa);
+
+            // --- NỘI THẤT TẦNG 2: GIƯỜNG NGỦ LỚN & TỦ ĐỒ ---
+            const bedFrame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.65, 4.2), trimMat);
+            bedFrame.position.set(houseX - 3.2, floor1H + 0.5, houseZ - 3.2);
+            scene.add(bedFrame);
+
+            const mattress = new THREE.Mesh(
+                new THREE.BoxGeometry(2.95, 0.35, 3.9),
+                new THREE.MeshStandardMaterial({ color: 0xf8fafc })
+            );
+            mattress.position.set(houseX - 3.2, floor1H + 0.95, houseZ - 3.2);
+            scene.add(mattress);
+
+            // Điểm tương tác xem Tivi (Tầng 1) & Nghỉ ngơi hồi đầy máu (Tầng 2)
+            stores.push({
+                type: 'house_tv',
+                title: 'SMART TV PHÒNG KHÁCH',
+                label: 'Xem Tivi thư giãn',
+                radarColor: '#38bdf8',
+                interactPos: new THREE.Vector3(houseX - 2.5, 0, houseZ - 1.5)
+            });
+
+            stores.push({
+                type: 'house_bed',
+                title: 'GIƯỜNG NGỦ TẦNG 2',
+                label: 'Ngủ hồi phục 100% Máu & Thể lực',
+                radarColor: '#38bdf8',
+                interactPos: new THREE.Vector3(houseX - 3.2, floor1H, houseZ - 3.2)
+            });
+
+            // --- KHU VỰC GARA ĐỂ XE CƯỚP ĐƯỢC (BÊN PHẢI NGÔI NHÀ, MỞ CỬA PHÍA TRƯỚC) ---
+            const gx = cx + 8.5;
+            const gz = cz - 1.5;
+            const gW = 10.6;
+            const gD = 12.5;
+            const gH = 4.6;
+
+            const garageFloor = new THREE.Mesh(
+                new THREE.BoxGeometry(gW, 0.24, gD),
+                new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 })
+            );
+            garageFloor.position.set(gx, 0.14, gz);
+            scene.add(garageFloor);
+
+            // Vạch sơn vàng đỗ xe trong gara
+            const garageLine = new THREE.Mesh(
+                new THREE.RingGeometry(3.2, 3.55, 4),
+                new THREE.MeshBasicMaterial({ color: 0xfacc15, side: THREE.DoubleSide })
+            );
+            garageLine.rotation.x = -Math.PI / 2;
+            garageLine.rotation.z = Math.PI / 4;
+            garageLine.position.set(gx, 0.28, gz);
+            scene.add(garageLine);
+
+            // Tường sau & tường phải + mái gara
+            const gBack = new THREE.Mesh(new THREE.BoxGeometry(gW, gH, 0.6), wallMat);
+            gBack.position.set(gx, gH / 2, gz - gD / 2);
+            scene.add(gBack);
+            colliders.push({ minX: gx - gW / 2, maxX: gx + gW / 2, minZ: gz - gD / 2 - 0.4, maxZ: gz - gD / 2 + 0.4 });
+
+            const gRight = new THREE.Mesh(new THREE.BoxGeometry(0.6, gH, gD), wallMat);
+            gRight.position.set(gx + gW / 2, gH / 2, gz);
+            scene.add(gRight);
+            colliders.push({ minX: gx + gW / 2 - 0.4, maxX: gx + gW / 2 + 0.4, minZ: gz - gD / 2, maxZ: gz + gD / 2 });
+
+            const gRoof = new THREE.Mesh(new THREE.BoxGeometry(gW + 0.6, 0.5, gD + 0.6), trimMat);
+            gRoof.position.set(gx, gH + 0.25, gz);
+            scene.add(gRoof);
         }
 
         // --- XÂY DỰNG 3 CỬA HÀNG CÓ CỬA MỞ & NPC CHỦ TIỆM BÊN TRONG ---
@@ -1483,25 +1800,29 @@
 
         function addStreetLamp(x, z) {
             const pole = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.11, 0.16, 6.8, 6),
+                new THREE.CylinderGeometry(0.11, 0.16, 6.8, 10),
                 new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6 })
             );
             pole.position.set(x, 3.5, z);
             scene.add(pole);
 
             const arm = new THREE.Mesh(
-                new THREE.BoxGeometry(1.4, 0.14, 0.14),
+                new THREE.CylinderGeometry(0.06, 0.06, 1.4, 8),
                 new THREE.MeshStandardMaterial({ color: 0x334155 })
             );
+            arm.rotation.z = Math.PI / 2;
             arm.position.set(x + 0.5, 6.8, z);
             scene.add(arm);
 
+            const bulbMat = new THREE.MeshBasicMaterial({ color: 0x475569 });
             const bulb = new THREE.Mesh(
-                new THREE.BoxGeometry(0.7, 0.2, 0.35),
-                new THREE.MeshBasicMaterial({ color: 0xfef08a })
+                new THREE.SphereGeometry(0.28, 10, 10),
+                bulbMat
             );
+            bulb.scale.set(1.4, 0.6, 1.0);
             bulb.position.set(x + 0.9, 6.7, z);
             scene.add(bulb);
+            streetLampBulbs.push(bulbMat);
         }
 
         function addTrafficLight(x, z) {
@@ -1759,297 +2080,408 @@
                     p.mesh.position.copy(p.pos);
 
                     if (p.health <= 0 && p.knockdownTimer <= 0.1) {
-                        state.cash += 75;
-                        showToast('+$75 Nhặt được tiền rơi!');
                         scene.remove(p.mesh);
                         pedestrians.splice(i, 1);
-                        spawnSinglePedestrian(Math.floor(Math.random() * 10));
-                    } else if (p.health > 0 && p.knockdownTimer <= 0) {
-                        // Lồm cồm đứng dậy và chạy hoảng loạn
+                        spawnSinglePedestrian(i);
+                    } else if (p.knockdownTimer <= 0.05) {
+                        ud.bodyPivot.rotation.set(0, 0, 0);
+                        p.panicTimer = 6.0;
+                    }
+                    continue;
+                }
+
+                // Bò lết chậm sau khi trúng 2 viên đạn
+                if (p.isCrawling) {
+                    p.crawlTimer -= dt;
+                    ud.walkCycle += dt * 4.5;
+                    ud.bodyPivot.position.y = 0.26;
+                    ud.bodyPivot.rotation.x = Math.PI / 2 - 0.12;
+                    ud.leftArm.shoulderPivot.rotation.x = -1.6 + Math.sin(ud.walkCycle) * 0.45;
+                    ud.rightArm.shoulderPivot.rotation.x = -1.6 - Math.sin(ud.walkCycle) * 0.45;
+                    ud.leftLeg.hipPivot.rotation.x = Math.sin(ud.walkCycle) * 0.25;
+                    ud.rightLeg.hipPivot.rotation.x = -Math.sin(ud.walkCycle) * 0.25;
+
+                    const crawlDir = new THREE.Vector3(Math.sin(p.rotY), 0, Math.cos(p.rotY));
+                    p.pos.addScaledVector(crawlDir, 1.15 * dt);
+                    resolveBuildingCollision(p.pos, 0.55);
+                    p.mesh.position.copy(p.pos);
+                    p.mesh.rotation.y = p.rotY;
+
+                    if (p.crawlTimer <= 0) {
+                        p.isCrawling = false;
+                        p.bulletHits = 0;
+                        ud.bodyPivot.position.y = 0.85;
                         ud.bodyPivot.rotation.set(0, 0, 0);
                         p.panicTimer = 5.0;
                     }
                     continue;
                 }
 
-                // Trạng thái NPC trúng 2 viên đạn: Bò lết trên mặt đường
-                if (p.isCrawling) {
-                    p.crawlTimer -= dt;
-                    ud.bodyPivot.position.y = THREE.MathUtils.lerp(ud.bodyPivot.position.y, 0.24, dt * 8);
-                    ud.bodyPivot.rotation.x = THREE.MathUtils.lerp(ud.bodyPivot.rotation.x, Math.PI / 2 - 0.12, dt * 8);
-                    ud.bodyPivot.rotation.z = Math.sin(ud.walkCycle * 0.5) * 0.15;
-
-                    const crawlSpeed = 1.25;
-                    const fwd = new THREE.Vector3(Math.sin(p.rotY), 0, Math.cos(p.rotY));
-                    p.pos.addScaledVector(fwd, crawlSpeed * dt);
-                    if (resolveBuildingCollision(p.pos, 0.6)) {
-                        p.rotY += Math.PI * 0.6;
-                    }
-
-                    ud.walkCycle += dt * 6;
-                    const armReach = Math.sin(ud.walkCycle);
-                    ud.leftArm.shoulderPivot.rotation.x = -2.4 + armReach * 0.55;
-                    ud.rightArm.shoulderPivot.rotation.x = -2.4 - armReach * 0.55;
-                    ud.leftLeg.hipPivot.rotation.x = 0.15 + armReach * 0.12;
-                    ud.rightLeg.hipPivot.rotation.x = 0.15 - armReach * 0.12;
-
-                    p.mesh.position.copy(p.pos);
-                    p.mesh.rotation.y = p.rotY;
-
-                    if (p.crawlTimer <= 0) {
-                        state.cash += 75;
-                        showToast('+$75 Nhặt được tiền rơi!');
-                        scene.remove(p.mesh);
-                        pedestrians.splice(i, 1);
-                        spawnSinglePedestrian(Math.floor(Math.random() * 10));
-                    }
-                    continue;
-                } else {
-                    ud.bodyPivot.position.y = THREE.MathUtils.lerp(ud.bodyPivot.position.y, 0.85, dt * 8);
-                    ud.bodyPivot.rotation.x = THREE.MathUtils.lerp(ud.bodyPivot.rotation.x, 0, dt * 8);
-                    ud.bodyPivot.rotation.z = THREE.MathUtils.lerp(ud.bodyPivot.rotation.z, 0, dt * 8);
-                }
-
+                // Đi bộ bình thường hoặc chạy hoảng loạn
                 let moveSpeed = p.speed;
                 if (p.panicTimer > 0) {
                     p.panicTimer -= dt;
-                    moveSpeed = 8.4; // Chạy thục mạng khi hoảng sợ
+                    moveSpeed = p.speed * 2.15;
                 } else {
-                    ud.bodyPivot.rotation.x = THREE.MathUtils.lerp(ud.bodyPivot.rotation.x, 0, dt * 8);
-                    ud.bodyPivot.rotation.z = THREE.MathUtils.lerp(ud.bodyPivot.rotation.z, 0, dt * 8);
                     p.turnTimer -= dt;
                     if (p.turnTimer <= 0) {
+                        p.turnTimer = 2.5 + Math.random() * 4;
                         p.rotY += (Math.random() > 0.5 ? 1 : -1) * (Math.PI / 2);
-                        p.turnTimer = 3 + Math.random() * 5;
                     }
                 }
 
                 const fwd = new THREE.Vector3(Math.sin(p.rotY), 0, Math.cos(p.rotY));
                 p.pos.addScaledVector(fwd, moveSpeed * dt);
 
-                if (resolveBuildingCollision(p.pos, 0.6)) {
-                    p.rotY += Math.PI * 0.75;
+                if (resolveBuildingCollision(p.pos, 0.55) || Math.abs(p.pos.x) > WORLD_LIMIT - 10 || Math.abs(p.pos.z) > WORLD_LIMIT - 10) {
+                    p.rotY += Math.PI / 2;
                 }
 
-                // Hoạt ảnh vung tay chân khi đi bộ / chạy trốn
-                ud.walkCycle += dt * (p.panicTimer > 0 ? 16 : 8);
-                const swing = Math.sin(ud.walkCycle) * (p.panicTimer > 0 ? 0.85 : 0.5);
+                ud.walkCycle += dt * (p.panicTimer > 0 ? 15 : 8);
+                const swing = Math.sin(ud.walkCycle) * (p.panicTimer > 0 ? 0.8 : 0.48);
                 ud.leftLeg.hipPivot.rotation.x = swing;
                 ud.rightLeg.hipPivot.rotation.x = -swing;
-                ud.leftArm.shoulderPivot.rotation.x = p.panicTimer > 0 ? -2.6 : -swing * 0.8;
-                ud.rightArm.shoulderPivot.rotation.x = p.panicTimer > 0 ? -2.6 : swing * 0.8;
+                ud.leftArm.shoulderPivot.rotation.x = p.panicTimer > 0 ? -2.5 + swing * 0.4 : -swing * 0.75;
+                ud.rightArm.shoulderPivot.rotation.x = p.panicTimer > 0 ? -2.5 - swing * 0.4 : swing * 0.75;
 
                 p.mesh.position.copy(p.pos);
                 p.mesh.rotation.y = p.rotY;
             }
         }
 
-        // --- 8 LOẠI PHƯƠNG TIỆN GIAO THÔNG & SIÊU XE ĐA DẠNG + XE CẢNH SÁT ---
+        // --- HIỆU ỨNG HẠT & TIA ĐẠN ---
+        function spawnParticles(origin, count, colorHex, speedScale = 6) {
+            const geo = new THREE.BoxGeometry(0.18, 0.18, 0.18);
+            const mat = new THREE.MeshBasicMaterial({ color: colorHex });
+            for (let i = 0; i < count; i++) {
+                const m = new THREE.Mesh(geo, mat);
+                m.position.copy(origin);
+                m.position.y += 0.6 + Math.random() * 0.6;
+                scene.add(m);
+                particles.push({
+                    mesh: m,
+                    vel: new THREE.Vector3(
+                        (Math.random() - 0.5) * speedScale,
+                        2.5 + Math.random() * speedScale * 0.8,
+                        (Math.random() - 0.5) * speedScale
+                    ),
+                    life: 0.45 + Math.random() * 0.35
+                });
+            }
+        }
+
+        function spawnTracer(start, end) {
+            const geo = new THREE.BufferGeometry().setFromPoints([start, end]);
+            const mat = new THREE.LineBasicMaterial({ color: 0xfef08a });
+            const line = new THREE.Line(geo, mat);
+            scene.add(line);
+            tracers.push({ line, life: 0.08 });
+        }
+
+        function updateEffects(dt) {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const pt = particles[i];
+                pt.life -= dt;
+                pt.vel.y -= 16 * dt;
+                pt.mesh.position.addScaledVector(pt.vel, dt);
+                if (pt.life <= 0) {
+                    scene.remove(pt.mesh);
+                    particles.splice(i, 1);
+                }
+            }
+            for (let i = tracers.length - 1; i >= 0; i--) {
+                const tr = tracers[i];
+                tr.life -= dt;
+                if (tr.life <= 0) {
+                    scene.remove(tr.line);
+                    tr.line.geometry.dispose();
+                    tracers.splice(i, 1);
+                }
+            }
+            for (const h of hydrants) {
+                if (h.broken && h.sprayTimer > 0) {
+                    h.sprayTimer -= dt;
+                    if (Math.random() < 0.45) {
+                        spawnParticles(h.pos, 1, 0x38bdf8, 8);
+                    }
+                }
+            }
+        }
+
+        // --- 9 LOẠI PHƯƠNG TIỆN BO CONG MỀM MẠI + SIÊU XE CHÂN THẬT + XE ĐẠP ---
         const VEHICLE_CATALOG = [
+            { type: 'bicycle', name: 'Xe Đạp Thể Thao', color: 0x38bdf8, maxSpeed: 21, accel: 18, turn: 3.4, health: 45, mass: 0.22, radius: 1.05, isBicycle: true },
             { type: 'sedan', name: 'City Sedan', color: 0x3b82f6, maxSpeed: 36, accel: 28, turn: 2.5, health: 100, mass: 1.0, radius: 1.9 },
-            { type: 'lambo', name: 'Lamborghini Aventador', color: 0xfacc15, maxSpeed: 56, accel: 48, turn: 3.05, health: 95, mass: 0.85, radius: 1.85 },
-            { type: 'ferrari', name: 'Ferrari F8 Tributo', color: 0xdc2626, maxSpeed: 54, accel: 46, turn: 3.0, health: 90, mass: 0.85, radius: 1.85 },
-            { type: 'bugatti', name: 'Bugatti Chiron', color: 0x0284c7, maxSpeed: 58, accel: 50, turn: 2.95, health: 105, mass: 0.9, radius: 1.9 },
-            { type: 'sports', name: 'Super Sports GT', color: 0x22c55e, maxSpeed: 48, accel: 40, turn: 2.85, health: 85, mass: 0.85, radius: 1.85 },
-            { type: 'suv', name: 'Offroad SUV / Pickup', color: 0x10b981, maxSpeed: 35, accel: 30, turn: 2.35, health: 145, mass: 1.45, radius: 2.1 },
+            { type: 'lambo', name: 'Lamborghini Aventador SVJ', color: 0xfacc15, maxSpeed: 58, accel: 50, turn: 3.1, health: 95, mass: 0.85, radius: 1.85 },
+            { type: 'ferrari', name: 'Ferrari SF90 Stradale', color: 0xdc2626, maxSpeed: 56, accel: 48, turn: 3.05, health: 90, mass: 0.85, radius: 1.85 },
+            { type: 'bugatti', name: 'Bugatti Chiron Super Sport', color: 0x0284c7, maxSpeed: 60, accel: 52, turn: 3.0, health: 105, mass: 0.9, radius: 1.9 },
+            { type: 'sports', name: 'Porsche 911 GT3 RS', color: 0x22c55e, maxSpeed: 50, accel: 42, turn: 2.9, health: 85, mass: 0.85, radius: 1.85 },
+            { type: 'suv', name: 'Range Rover Sport', color: 0x10b981, maxSpeed: 36, accel: 30, turn: 2.35, health: 145, mass: 1.45, radius: 2.1 },
             { type: 'truck', name: 'Cargo Box Truck', color: 0xf8fafc, maxSpeed: 28, accel: 20, turn: 1.9, health: 210, mass: 2.2, radius: 2.5 },
-            { type: 'bus', name: 'Metro City Bus', color: 0xf59e0b, maxSpeed: 26, accel: 18, turn: 1.75, health: 260, mass: 2.8, radius: 2.8 },
-            { type: 'bike', name: 'Xe đạp thành phố', color: 0x16a34a, maxSpeed: 18, accel: 12, turn: 3.3, health: 45, mass: 0.35, radius: 1.0 }
+            { type: 'bus', name: 'Metro City Bus', color: 0xf59e0b, maxSpeed: 26, accel: 18, turn: 1.75, health: 260, mass: 2.8, radius: 2.8 }
         ];
+
+        // Hàm hỗ trợ tạo khối thân xe bo tròn mềm mại thay vì khối hộp vuông thô
+        function createRoundedBoxMesh(w, h, d, material, radius = 0.22) {
+            const shape = new THREE.Shape();
+            const hw = w / 2 - radius;
+            const hd = d / 2 - radius;
+            shape.moveTo(-hw, -hd - radius);
+            shape.lineTo(hw, -hd - radius);
+            shape.quadraticCurveTo(hw + radius, -hd - radius, hw + radius, -hd);
+            shape.lineTo(hw + radius, hd);
+            shape.quadraticCurveTo(hw + radius, hd + radius, hw, hd + radius);
+            shape.lineTo(-hw, hd + radius);
+            shape.quadraticCurveTo(-hw - radius, hd + radius, -hw - radius, hd);
+            shape.lineTo(-hw - radius, -hd);
+            shape.quadraticCurveTo(-hw - radius, -hd - radius, -hw, -hd - radius);
+
+            const extrude = new THREE.ExtrudeGeometry(shape, {
+                depth: h,
+                bevelEnabled: true,
+                bevelSegments: 3,
+                steps: 1,
+                bevelSize: radius * 0.45,
+                bevelThickness: radius * 0.45
+            });
+            extrude.rotateX(Math.PI / 2);
+            extrude.center();
+            const mesh = new THREE.Mesh(extrude, material);
+            mesh.castShadow = true;
+            return mesh;
+        }
 
         function createVehicleMesh(spec, isPolice = false) {
             const group = new THREE.Group();
             const bodyColor = isPolice ? 0x0f172a : spec.color;
-            const bodyMat = new THREE.MeshStandardMaterial({ color: bodyColor, roughness: 0.3, metalness: 0.4 });
-            const glassMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.15, metalness: 0.7 });
-            const wheelGeo = new THREE.CylinderGeometry(0.44, 0.44, 0.34, 12);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: bodyColor, roughness: 0.22, metalness: 0.55 });
+            const glassMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.1, metalness: 0.85 });
+            const carbonMat = new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 0.4, metalness: 0.4 });
+            const rimMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.85, roughness: 0.2 });
+
+            // --- XE ĐẠP THỂ THAO (BICYCLE) ---
+            if (spec.isBicycle) {
+                const frameMat = new THREE.MeshStandardMaterial({ color: spec.color, metalness: 0.6, roughness: 0.3 });
+                const tireGeo = new THREE.TorusGeometry(0.42, 0.06, 10, 22);
+                tireGeo.rotateY(Math.PI / 2);
+
+                const frontWheel = new THREE.Mesh(tireGeo, carbonMat);
+                frontWheel.position.set(0, 0.48, 0.72);
+                const rearWheel = new THREE.Mesh(tireGeo, carbonMat);
+                rearWheel.position.set(0, 0.48, -0.72);
+                group.add(frontWheel, rearWheel);
+
+                const topTube = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.95, 8), frameMat);
+                topTube.rotation.x = Math.PI / 2;
+                topTube.position.set(0, 0.92, 0);
+                const downTube = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.92, 8), frameMat);
+                downTube.rotation.x = 0.78;
+                downTube.position.set(0, 0.68, 0.18);
+                const seatTube = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.65, 8), frameMat);
+                seatTube.rotation.x = -0.25;
+                seatTube.position.set(0, 0.76, -0.28);
+                const fork = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.72, 8), frameMat);
+                fork.rotation.x = -0.22;
+                fork.position.set(0, 0.74, 0.62);
+
+                const handlebar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.68, 8), carbonMat);
+                handlebar.rotation.z = Math.PI / 2;
+                handlebar.position.set(0, 1.08, 0.54);
+
+                const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.06, 0.28), carbonMat);
+                saddle.position.set(0, 1.08, -0.36);
+
+                group.add(topTube, downTube, seatTube, fork, handlebar, saddle);
+                group.userData = { redSiren: null, blueSiren: null };
+                return group;
+            }
+
+            const wheelGeo = new THREE.CylinderGeometry(0.44, 0.44, 0.34, 18);
             wheelGeo.rotateZ(Math.PI / 2);
-            const wheelMat = new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 0.9 });
+            const rimGeo = new THREE.CylinderGeometry(0.27, 0.27, 0.36, 14);
+            rimGeo.rotateZ(Math.PI / 2);
 
             let length = 4.4;
             let width = 2.2;
-            let wheelZ = [1.35, -1.35];
+            let wheelZ = [1.38, -1.38];
 
             if (isPolice || spec.type === 'sedan') {
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.75, 4.4), bodyMat);
-                chassis.position.y = 0.65;
-                chassis.castShadow = true;
+                const chassis = createRoundedBoxMesh(2.2, 0.72, 4.4, bodyMat, 0.28);
+                chassis.position.y = 0.64;
                 group.add(chassis);
 
                 if (isPolice) {
-                    const stripe = new THREE.Mesh(
-                        new THREE.BoxGeometry(2.24, 0.68, 2.0),
-                        new THREE.MeshStandardMaterial({ color: 0xf8fafc })
-                    );
-                    stripe.position.y = 0.66;
+                    const stripe = createRoundedBoxMesh(2.24, 0.66, 2.0, new THREE.MeshStandardMaterial({ color: 0xf8fafc }), 0.2);
+                    stripe.position.y = 0.65;
                     group.add(stripe);
                 }
 
-                const cabin = new THREE.Mesh(
-                    new THREE.BoxGeometry(1.85, 0.65, 2.2),
-                    isPolice ? new THREE.MeshStandardMaterial({ color: 0xf8fafc }) : glassMat
-                );
-                cabin.position.set(0, 1.32, -0.15);
-                cabin.castShadow = true;
+                const cabin = createRoundedBoxMesh(1.82, 0.62, 2.25, isPolice ? new THREE.MeshStandardMaterial({ color: 0xf8fafc }) : glassMat, 0.32);
+                cabin.position.set(0, 1.28, -0.15);
                 group.add(cabin);
             } else if (spec.type === 'lambo') {
-                // Siêu xe Lamborghini Aventador thiết kế nêm góc cạnh + cánh gió carbon
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.34, 0.48, 4.65), bodyMat);
-                chassis.position.y = 0.46;
-                chassis.castShadow = true;
+                // LAMBORGHINI AVENTADOR SVJ: Thân khí động học thấp, mui vát giọt nước, hốc gió Y-shape & cánh gió carbon
+                length = 4.7;
+                width = 2.36;
+                const chassis = createRoundedBoxMesh(2.36, 0.44, 4.7, bodyMat, 0.32);
+                chassis.position.y = 0.44;
                 group.add(chassis);
 
-                const hoodSlope = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.25, 1.5), bodyMat);
-                hoodSlope.position.set(0, 0.62, 1.2);
-                hoodSlope.rotation.x = 0.16;
-                group.add(hoodSlope);
+                // Mui xe vát thấp khí động học
+                const nose = createRoundedBoxMesh(2.15, 0.24, 1.65, bodyMat, 0.28);
+                nose.position.set(0, 0.56, 1.35);
+                nose.rotation.x = 0.14;
+                group.add(nose);
 
-                const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.44, 1.85), glassMat);
-                cabin.position.set(0, 0.9, -0.15);
-                group.add(cabin);
+                // Bộ chia gió trước carbon (Front Splitter)
+                const splitter = createRoundedBoxMesh(2.38, 0.08, 0.6, carbonMat, 0.18);
+                splitter.position.set(0, 0.24, 2.15);
+                group.add(splitter);
 
-                // Khe hút gió hông màu đen carbon
+                // Khoang lái giọt nước bo cong liền mạch
+                const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.95, 20, 14), glassMat);
+                canopy.scale.set(0.95, 0.48, 1.35);
+                canopy.position.set(0, 0.76, -0.05);
+                group.add(canopy);
+
+                // Hốc hút gió hông cỡ lớn đặc trưng Lamborghini
                 [-1.18, 1.18].forEach(sx => {
-                    const intake = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.34, 1.2), new THREE.MeshStandardMaterial({ color: 0x09090b }));
-                    intake.position.set(sx, 0.52, -0.45);
-                    group.add(intake);
+                    const sidePod = createRoundedBoxMesh(0.14, 0.36, 1.45, carbonMat, 0.1);
+                    sidePod.position.set(sx, 0.5, -0.45);
+                    group.add(sidePod);
                 });
 
-                const wing = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.1, 0.42), new THREE.MeshStandardMaterial({ color: 0x09090b }));
-                wing.position.set(0, 1.06, -2.15);
+                // Cánh gió đuôi SVJ carbon + 2 trụ đỡ
+                const wing = createRoundedBoxMesh(2.34, 0.07, 0.44, carbonMat, 0.14);
+                wing.position.set(0, 1.05, -2.18);
                 group.add(wing);
+                [-0.65, 0.65].forEach(px => {
+                    const strut = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.38, 0.22), carbonMat);
+                    strut.position.set(px, 0.85, -2.12);
+                    group.add(strut);
+                });
             } else if (spec.type === 'ferrari') {
-                // Siêu xe Ferrari F8 đỏ rực + sọc đua trắng
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.28, 0.5, 4.55), bodyMat);
-                chassis.position.y = 0.48;
-                chassis.castShadow = true;
+                // FERRARI SF90 STRADALE: Đường cong mềm mại, mũi cá mập, khoang kính đen vòm cong
+                length = 4.6;
+                width = 2.3;
+                const chassis = createRoundedBoxMesh(2.3, 0.46, 4.6, bodyMat, 0.35);
+                chassis.position.y = 0.46;
                 group.add(chassis);
 
-                const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.52, 4.56), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
-                stripe.position.y = 0.49;
-                group.add(stripe);
+                const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.92, 20, 14), glassMat);
+                canopy.scale.set(0.94, 0.5, 1.32);
+                canopy.position.set(0, 0.78, -0.05);
+                group.add(canopy);
 
-                const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.74, 0.46, 1.8), glassMat);
-                cabin.position.set(0, 0.94, -0.1);
-                group.add(cabin);
+                const engineDeck = createRoundedBoxMesh(1.55, 0.16, 1.35, carbonMat, 0.2);
+                engineDeck.position.set(0, 0.72, -1.35);
+                group.add(engineDeck);
             } else if (spec.type === 'bugatti') {
-                // Siêu xe Bugatti Chiron hai tông màu đặc trưng
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.38, 0.54, 4.6), bodyMat);
-                chassis.position.y = 0.5;
-                chassis.castShadow = true;
+                // BUGATTI CHIRON SUPER SPORT: Đường cong chữ C đặc trưng hai bên hông, mũi móng ngựa
+                length = 4.65;
+                width = 2.4;
+                const chassis = createRoundedBoxMesh(2.4, 0.5, 4.65, bodyMat, 0.38);
+                chassis.position.y = 0.48;
                 group.add(chassis);
 
-                const frontAccent = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.55, 2.15), new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.6 }));
-                frontAccent.position.set(0, 0.5, 1.22);
-                group.add(frontAccent);
+                const frontHalf = createRoundedBoxMesh(2.42, 0.51, 2.25, carbonMat, 0.38);
+                frontHalf.position.set(0, 0.48, 1.2);
+                group.add(frontHalf);
 
-                const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.82, 0.48, 1.9), glassMat);
-                cabin.position.set(0, 0.98, -0.1);
-                group.add(cabin);
+                const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.96, 20, 14), glassMat);
+                canopy.scale.set(0.96, 0.52, 1.35);
+                canopy.position.set(0, 0.82, -0.05);
+                group.add(canopy);
+
+                // Vòng cung chữ C mạ bạc hai bên sườn xe
+                [-1.21, 1.21].forEach(sx => {
+                    const cLine = new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.04, 10, 20, Math.PI), rimMat);
+                    cLine.rotation.y = sx > 0 ? Math.PI / 2 : -Math.PI / 2;
+                    cLine.rotation.z = Math.PI / 2;
+                    cLine.position.set(sx, 0.68, -0.05);
+                    group.add(cLine);
+                });
             } else if (spec.type === 'sports') {
-                // Siêu xe thể thao gầm thấp, mũi nhọn & cánh gió sau
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.25, 0.56, 4.5), bodyMat);
-                chassis.position.y = 0.52;
-                chassis.castShadow = true;
+                // PORSCHE 911 GT3 RS: Mui vòm tròn cổ điển + cánh gió lớn
+                const chassis = createRoundedBoxMesh(2.26, 0.52, 4.5, bodyMat, 0.34);
+                chassis.position.y = 0.5;
                 group.add(chassis);
 
-                const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.5, 1.95), glassMat);
-                cabin.position.set(0, 1.02, -0.1);
-                group.add(cabin);
+                const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.9, 18, 14), glassMat);
+                canopy.scale.set(0.95, 0.54, 1.38);
+                canopy.position.set(0, 0.84, -0.1);
+                group.add(canopy);
 
-                // Cánh gió đuôi (Spoiler)
-                const wing = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.12, 0.38), new THREE.MeshStandardMaterial({ color: 0x09090b }));
+                const wing = createRoundedBoxMesh(2.22, 0.08, 0.38, carbonMat, 0.12);
                 wing.position.set(0, 1.12, -2.05);
                 group.add(wing);
             } else if (spec.type === 'suv') {
-                // Xe bán tải / SUV gầm cao hầm hố
                 length = 4.8;
                 width = 2.35;
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.35, 0.92, 4.8), bodyMat);
-                chassis.position.y = 0.82;
-                chassis.castShadow = true;
+                const chassis = createRoundedBoxMesh(2.35, 0.88, 4.8, bodyMat, 0.3);
+                chassis.position.y = 0.8;
                 group.add(chassis);
 
-                const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.78, 2.5), glassMat);
-                cabin.position.set(0, 1.62, 0.35);
+                const cabin = createRoundedBoxMesh(2.1, 0.74, 3.2, glassMat, 0.28);
+                cabin.position.set(0, 1.56, -0.15);
                 group.add(cabin);
-
-                // Thùng sau bán tải
-                const bed = new THREE.Mesh(new THREE.BoxGeometry(2.05, 0.45, 1.8), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-                bed.position.set(0, 1.35, -1.4);
-                group.add(bed);
             } else if (spec.type === 'truck') {
-                // Xe tải thùng chở hàng lớn
                 length = 6.2;
                 width = 2.5;
                 wheelZ = [2.1, -1.9];
-                const cab = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.1, 1.8), new THREE.MeshStandardMaterial({ color: 0x0284c7 }));
-                cab.position.set(0, 1.45, 2.0);
-                cab.castShadow = true;
+                const cab = createRoundedBoxMesh(2.4, 2.0, 1.8, new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3 }), 0.28);
+                cab.position.set(0, 1.42, 2.0);
                 group.add(cab);
 
-                const cargo = new THREE.Mesh(new THREE.BoxGeometry(2.55, 2.65, 4.2), bodyMat);
-                cargo.position.set(0, 1.78, -0.95);
-                cargo.castShadow = true;
+                const cargo = createRoundedBoxMesh(2.55, 2.55, 4.2, bodyMat, 0.22);
+                cargo.position.set(0, 1.74, -0.95);
                 group.add(cargo);
             } else if (spec.type === 'bus') {
-                // Xe buýt thành phố thân dài
                 length = 7.6;
                 width = 2.55;
                 wheelZ = [2.5, -2.5];
-                const busBody = new THREE.Mesh(new THREE.BoxGeometry(2.55, 2.45, 7.6), bodyMat);
-                busBody.position.set(0, 1.65, 0);
-                busBody.castShadow = true;
+                const busBody = createRoundedBoxMesh(2.55, 2.4, 7.6, bodyMat, 0.35);
+                busBody.position.set(0, 1.62, 0);
                 group.add(busBody);
 
-                const windowBand = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.85, 6.8), glassMat);
-                windowBand.position.set(0, 2.05, 0.1);
+                const windowBand = createRoundedBoxMesh(2.6, 0.82, 6.8, glassMat, 0.2);
+                windowBand.position.set(0, 2.02, 0.1);
                 group.add(windowBand);
             }
 
-            // Xe đạp: khung ống, hai bánh và tay lái.
-            if (spec.type === 'bike') {
-                group.clear(); length = 1.7; width = 0.65; wheelZ = [0.72, -0.72];
-                const rubber = new THREE.MeshStandardMaterial({color:0x171717, roughness:0.95});
-                const metal = new THREE.MeshStandardMaterial({color:spec.color, metalness:0.65, roughness:0.3});
-                const wheelGeoBike = new THREE.TorusGeometry(0.43, 0.055, 8, 18);
-                for (const z of wheelZ) { const w = new THREE.Mesh(wheelGeoBike, rubber); w.rotation.y=Math.PI/2; w.position.set(0,0.48,z); group.add(w); }
-                const tube=(a,b,r=0.045)=>{const d=new THREE.Vector3().subVectors(b,a);const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),8),metal);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());group.add(m);};
-                const A=new THREE.Vector3(0,.48,.72),B=new THREE.Vector3(0,.48,-.72),C=new THREE.Vector3(0,1.02,.12),D=new THREE.Vector3(0,1.02,-.12);
-                tube(A,C);tube(C,D);tube(D,B);tube(B,C);tube(C,new THREE.Vector3(0,1.12,-.72));
-                const seat=new THREE.Mesh(new THREE.BoxGeometry(.28,.08,.18),new THREE.MeshStandardMaterial({color:0x171717}));seat.position.set(0,1.08,.12);group.add(seat);
-                const pedal=new THREE.Mesh(new THREE.BoxGeometry(.5,.06,.08),metal);pedal.position.set(0,.48,0);group.add(pedal);
-            }
-
-            // Đèn pha & đèn hậu
+            // Đèn pha LED bo tròn & dải đèn hậu hiện đại
             const hlMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
             const tlMat = new THREE.MeshBasicMaterial({ color: 0xdc2626 });
             [-width * 0.32, width * 0.32].forEach(wx => {
-                const hl = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.2, 0.1), hlMat);
-                hl.position.set(wx, 0.72, length / 2 + 0.02);
+                const hl = new THREE.Mesh(new THREE.SphereGeometry(0.18, 10, 10), hlMat);
+                hl.scale.set(1.4, 0.65, 0.5);
+                hl.position.set(wx, 0.62, length / 2 + 0.02);
                 group.add(hl);
 
-                const tl = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.2, 0.1), tlMat);
-                tl.position.set(wx, 0.72, -length / 2 - 0.02);
+                const tl = new THREE.Mesh(new THREE.SphereGeometry(0.18, 10, 10), tlMat);
+                tl.scale.set(1.5, 0.6, 0.5);
+                tl.position.set(wx, 0.64, -length / 2 - 0.02);
                 group.add(tl);
             });
 
-            // Bánh xe
+            // Bánh xe + Mâm hợp kim sáng bóng
             wheelZ.forEach(wz => {
-                [-width / 2 - 0.04, width / 2 + 0.04].forEach(wx => {
-                    const w = new THREE.Mesh(wheelGeo, wheelMat);
+                [-width / 2 - 0.02, width / 2 + 0.02].forEach(wx => {
+                    const w = new THREE.Mesh(wheelGeo, carbonMat);
                     w.position.set(wx, 0.44, wz);
-                    group.add(w);
+                    const rim = new THREE.Mesh(rimGeo, rimMat);
+                    rim.position.set(wx, 0.44, wz);
+                    group.add(w, rim);
                 });
             });
 
             // Đèn còi cảnh sát xanh-đỏ nhấp nháy
             let redSiren = null, blueSiren = null;
             if (isPolice) {
-                redSiren = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.18, 0.32), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
-                redSiren.position.set(-0.32, 1.75, -0.1);
-                blueSiren = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.18, 0.32), new THREE.MeshBasicMaterial({ color: 0x3b82f6 }));
-                blueSiren.position.set(0.32, 1.75, -0.1);
+                redSiren = createRoundedBoxMesh(0.55, 0.16, 0.32, new THREE.MeshBasicMaterial({ color: 0xef4444 }), 0.08);
+                redSiren.position.set(-0.32, 1.68, -0.1);
+                blueSiren = createRoundedBoxMesh(0.55, 0.16, 0.32, new THREE.MeshBasicMaterial({ color: 0x3b82f6 }), 0.08);
+                blueSiren.position.set(0.32, 1.68, -0.1);
                 group.add(redSiren, blueSiren);
             }
 
@@ -2101,6 +2533,7 @@
                 turnSpeed: spec.turn,
                 name: spec.name,
                 type: spec.type,
+                isBicycle: !!spec.isBicycle,
                 isPolice,
                 ownedByPlayer: false,
                 health: spec.health,
@@ -2131,10 +2564,11 @@
             vehicles.forEach(v => scene.remove(v.mesh));
             vehicles.length = 0;
 
-            // Đỗ sẵn dàn siêu xe Lamborghini, Ferrari, Bugatti gần điểm xuất phát để người chơi trải nghiệm ngay
-            spawnVehicle(false, new THREE.Vector3(3.6, 0, 18), 0, VEHICLE_CATALOG[1]); // Lamborghini Aventador
-            spawnVehicle(false, new THREE.Vector3(-3.6, 0, 24), Math.PI, VEHICLE_CATALOG[2]); // Ferrari F8
-            spawnVehicle(false, new THREE.Vector3(3.6, 0, 31), 0, VEHICLE_CATALOG[3]); // Bugatti Chiron
+            // Đỗ sẵn Xe đạp thể thao + Dàn siêu xe Lamborghini, Ferrari, Bugatti gần điểm xuất phát & nhà chính
+            spawnVehicle(false, new THREE.Vector3(-3.6, 0, 12), 0, VEHICLE_CATALOG[0]); // Xe đạp thể thao
+            spawnVehicle(false, new THREE.Vector3(3.6, 0, 18), 0, VEHICLE_CATALOG[2]);  // Lamborghini Aventador SVJ
+            spawnVehicle(false, new THREE.Vector3(-3.6, 0, 24), Math.PI, VEHICLE_CATALOG[3]); // Ferrari SF90
+            spawnVehicle(false, new THREE.Vector3(3.6, 0, 31), 0, VEHICLE_CATALOG[4]);  // Bugatti Chiron
 
             for (let i = 0; i < CONFIG.MAX_CIVILIANS; i++) {
                 const pos = getRandomRoadPosition();
@@ -2144,67 +2578,134 @@
                 spawnVehicle(false, pos, rotY);
             }
         }
+        // --- CẬP NHẬT CHU KỲ NGÀY & ĐÊM (1 TIẾNG TRONG GAME = 5 PHÚT NGOÀI ĐỜI = 300 GIÂY) ---
+        function updateDayNightCycle(dt) {
+            // 1 giờ game = 300 giây thực -> tốc độ trôi giờ = 1 / 300 giờ/giây
+            state.gameHour = (state.gameHour + dt / 300) % 24;
 
-        // --- HIỆU ỨNG HẠT & TIA ĐẠN ---
-        const particleGeo = new THREE.BoxGeometry(0.26, 0.26, 0.26);
-        function spawnParticles(pos, count = 10, colorHex = 0xfbbf24, upward = 6) {
-            const mat = new THREE.MeshBasicMaterial({ color: colorHex });
-            for (let i = 0; i < count; i++) {
-                const mesh = new THREE.Mesh(particleGeo, mat);
-                mesh.position.copy(pos);
-                mesh.position.y += 0.6 + Math.random() * 0.5;
-                scene.add(mesh);
+            const hour = state.gameHour;
+            const hh = Math.floor(hour).toString().padStart(2, '0');
+            const mm = Math.floor((hour - Math.floor(hour)) * 60).toString().padStart(2, '0');
+            document.getElementById('hud-clock').textContent = `${hh}:${mm}`;
 
-                particles.push({
-                    mesh,
-                    vel: new THREE.Vector3(
-                        (Math.random() - 0.5) * 14,
-                        2 + Math.random() * upward,
-                        (Math.random() - 0.5) * 14
-                    ),
-                    life: 0.4 + Math.random() * 0.35
-                });
+            // Tính góc mặt trời (6h sáng mọc ở hướng Đông, 12h trưa đỉnh đầu, 18h tối lặn ở hướng Tây)
+            const sunAngle = ((hour - 6) / 24) * Math.PI * 2;
+            const skyRadius = 260;
+            const sunY = Math.sin(sunAngle) * skyRadius;
+            const sunX = Math.cos(sunAngle) * skyRadius;
+
+            if (sunMesh && moonMesh) {
+                sunMesh.position.set(player.pos.x + sunX, sunY, player.pos.z - 80);
+                moonMesh.position.set(player.pos.x - sunX, -sunY, player.pos.z - 80);
+                sunMesh.visible = sunY > -20;
+                moonMesh.visible = -sunY > -20;
+            }
+
+            // Hệ số ánh sáng ban ngày (0 = Đêm tối, 1 = Trưa nắng)
+            const dayFactor = THREE.MathUtils.clamp((Math.sin(sunAngle) + 0.25) / 1.1, 0, 1);
+            const isNight = dayFactor < 0.35;
+            document.getElementById('hud-day-icon').textContent = isNight ? '🌙' : (hour >= 16.5 && hour <= 18.5 ? '🌅' : '☀️');
+
+            // Chuyển màu bầu trời & sương mù mượt mà (Ngày xanh tươi -> Hoàng hôn cam -> Đêm xanh thẫm)
+            const nightSky = new THREE.Color(0x060b19);
+            const sunsetSky = new THREE.Color(0xf97316);
+            const daySky = new THREE.Color(0x7dd3fc);
+
+            let currentSky = nightSky.clone().lerp(daySky, dayFactor);
+            if (dayFactor > 0.1 && dayFactor < 0.45) {
+                const sunsetBlend = 1 - Math.abs(dayFactor - 0.275) / 0.175;
+                currentSky.lerp(sunsetSky, sunsetBlend * 0.55);
+            }
+
+            scene.background.copy(currentSky);
+            scene.fog.color.copy(currentSky);
+
+            hemiLight.intensity = 0.24 + dayFactor * 0.62;
+            dirLight.intensity = dayFactor * 1.05;
+            if (dayFactor > 0.05) {
+                dirLight.position.set(player.pos.x + sunX * 0.4, Math.max(30, sunY * 0.6), player.pos.z + 55);
+            }
+
+            // Bật đèn đường & đèn cửa sổ các tòa nhà lớn khi trời tối
+            const lampColor = isNight ? 0xfef08a : 0x475569;
+            for (let i = 0; i < streetLampBulbs.length; i++) {
+                streetLampBulbs[i].color.setHex(lampColor);
+            }
+            const winColor = isNight ? 0xfde047 : 0x334155;
+            for (let i = 0; i < nightWindowMats.length; i++) {
+                nightWindowMats[i].color.setHex(winColor);
             }
         }
+        // --- TƯƠNG TÁC CƯỚP XE, LÁI XE ĐẠP, MỞ CỬA HÀNG HOẶC NỘI THẤT NHÀ ---
+        function handleInteractAction() {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen) return;
 
-        function spawnTracer(startPos, endPos) {
-            const points = [startPos.clone(), endPos.clone()];
-            const geo = new THREE.BufferGeometry().setFromPoints(points);
-            const mat = new THREE.LineBasicMaterial({ color: 0xfef08a });
-            const line = new THREE.Line(geo, mat);
-            scene.add(line);
-            tracers.push({ line, life: 0.08 });
-        }
+            if (player.inVehicle) {
+                const v = player.inVehicle;
+                // Phanh dừng hẳn xe khi rời khỏi xe để xe không trôi hay xoay vòng
+                v.speed = 0;
+                v.knockbackVel.set(0, 0, 0);
+                v.isParkedByPlayer = true;
 
-        function updateEffects(dt) {
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.life -= dt;
-                p.vel.y -= 18 * dt;
-                p.mesh.position.addScaledVector(p.vel, dt);
-                p.mesh.scale.setScalar(Math.max(0.01, p.life * 2));
-                if (p.life <= 0) {
-                    scene.remove(p.mesh);
-                    particles.splice(i, 1);
-                }
-            }
-
-            for (let i = tracers.length - 1; i >= 0; i--) {
-                const t = tracers[i];
-                t.life -= dt;
-                if (t.life <= 0) {
-                    scene.remove(t.line);
-                    t.line.geometry.dispose();
-                    tracers.splice(i, 1);
-                }
-            }
-
-            for (const h of hydrants) {
-                if (h.broken && h.sprayTimer > 0) {
-                    h.sprayTimer -= dt;
-                    if (Math.random() < 0.45) {
-                        spawnParticles(h.pos, 1, 0x38bdf8, 12);
+                // Kiểm tra nếu xe đang đỗ trong Gara của ngôi nhà chính -> Lưu xe vào sở hữu vĩnh viễn!
+                if (playerHouseInfo) {
+                    const gb = playerHouseInfo.garageBounds;
+                    if (v.pos.x >= gb.minX && v.pos.x <= gb.maxX && v.pos.z >= gb.minZ && v.pos.z <= gb.maxZ) {
+                        v.ownedByPlayer = true;
+                        if (v.ownedMarker) v.ownedMarker.visible = true;
+                        showToast(`🏠 Đã cất ${v.name} vào Gara nhà bạn! Xe đã thuộc sở hữu của bạn.`);
+                        sound.playCash();
                     }
+                }
+
+                const exitOffset = new THREE.Vector3(-2.4, 0, 0).applyAxisAngle(new THREE.Vector3(0, 1, 0), v.rotY);
+                player.pos.copy(v.pos).add(exitOffset);
+                player.pos.y = 0;
+                resolveBuildingCollision(player.pos, 0.8);
+
+                player.rotY = v.rotY;
+                state.camYaw = v.rotY + Math.PI;
+                state.camPitch = 0.28;
+                player.mesh.position.copy(player.pos);
+                player.mesh.visible = true;
+                player.inVehicle = null;
+                updateControlModeUI();
+                sound.playMelee();
+                return;
+            }
+
+            if (!player.nearbyInteract) return;
+
+            if (player.nearbyInteract.kind === 'vehicle') {
+                const v = player.nearbyInteract.ref;
+                player.inVehicle = v;
+                // Nếu là xe đạp thì vẫn hiển thị nhân vật ngồi đạp xe, còn ô tô thì ẩn vào khoang lái
+                player.mesh.visible = !!v.isBicycle;
+                v.speed = Math.max(0, v.speed * 0.25);
+                updateControlModeUI();
+                sound.playMelee();
+
+                if (v.ownedByPlayer || v.isBicycle) {
+                    showToast(`Đang lái: ${v.name}`);
+                } else {
+                    state.carsStolen++;
+                    state.cash += 150;
+                    state.stolenCar = v;
+                    showToast(`+$150 Cướp xe ${v.name}! Cắt đuôi cảnh sát hoặc cất vào Gara nhà.`);
+                    addCrimeHeat(55, true);
+                }
+            } else if (player.nearbyInteract.kind === 'store') {
+                const st = player.nearbyInteract.ref;
+                if (st.type === 'house_tv') {
+                    showToast('📺 Đang xem kênh tin tức thành phố trên Smart TV...');
+                    sound.playCash();
+                } else if (st.type === 'house_bed') {
+                    player.health = 100;
+                    player.stamina = 100;
+                    showToast('🛏️ Bạn đã nghỉ ngơi! Hồi đầy 100% Máu & Thể lực.');
+                    sound.playCash();
+                } else {
+                    openStoreModal(st);
                 }
             }
         }
@@ -2618,7 +3119,8 @@
             if (player.knockdownTimer > 0) {
                 player.knockdownTimer -= dt;
                 player.pos.addScaledVector(player.knockbackVel, dt);
-                player.knockbackVel.multiplyScalar(Math.pow(0.18, dt));
+                player.knockbackVel.multiplyScalar(Math.pow(0.08, dt));
+                resolveBuildingCollision(player.pos, 0.72);
 
                 player.velY -= CONFIG.GRAVITY * dt;
                 player.pos.y += player.velY * dt;
@@ -2628,17 +3130,19 @@
                     player.isGrounded = true;
                 }
 
-                resolveBuildingCollision(player.pos, 0.75);
-                ud.bodyPivot.rotation.x = THREE.MathUtils.lerp(ud.bodyPivot.rotation.x, -Math.PI / 2, dt * 10);
+                ud.bodyPivot.rotation.x = player.knockdownTimer > 0.35 ? -Math.PI / 2.2 : 0;
                 player.mesh.position.copy(player.pos);
+                player.mesh.rotation.y = player.rotY;
                 return;
-            } else {
-                ud.bodyPivot.rotation.x = THREE.MathUtils.lerp(ud.bodyPivot.rotation.x, 0, dt * 10);
             }
+            ud.bodyPivot.rotation.x = 0;
 
-            const forwardInput = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
-            const rightInput = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
-            const wantsSprint = (keys['ShiftLeft'] || keys['ShiftRight']) && (forwardInput !== 0 || rightInput !== 0);
+            // Kết hợp đầu vào từ Bàn phím (PC) và Joystick cảm ứng (Mobile)
+            const kbForward = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
+            const kbRight = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
+            const forwardInput = THREE.MathUtils.clamp(kbForward - mobileInput.joyY, -1, 1);
+            const rightInput = THREE.MathUtils.clamp(kbRight + mobileInput.joyX, -1, 1);
+            const wantsSprint = (keys['ShiftLeft'] || keys['ShiftRight'] || mobileInput.sprint) && (Math.abs(forwardInput) > 0.1 || Math.abs(rightInput) > 0.1);
 
             // Quản lý thể lực (Stamina)
             let isSprinting = false;
@@ -2650,7 +3154,7 @@
             }
 
             const moveSpeed = isSprinting ? 14.5 : 8.2;
-            const isMoving = forwardInput !== 0 || rightInput !== 0;
+            const isMoving = Math.abs(forwardInput) > 0.08 || Math.abs(rightInput) > 0.08;
 
             if (isMoving) {
                 const camForward = new THREE.Vector3(-Math.sin(state.camYaw), 0, -Math.cos(state.camYaw));
@@ -2658,8 +3162,8 @@
 
                 const moveDir = new THREE.Vector3()
                     .addScaledVector(camForward, forwardInput)
-                    .addScaledVector(camRight, rightInput)
-                    .normalize();
+                    .addScaledVector(camRight, rightInput);
+                if (moveDir.length() > 1) moveDir.normalize();
 
                 player.pos.addScaledVector(moveDir, moveSpeed * dt);
                 resolveBuildingCollision(player.pos, 0.72);
@@ -2671,11 +3175,28 @@
                 player.rotY += diff * Math.min(1, dt * 13);
             }
 
+            // Hỗ trợ đi lên Tầng 2 của Ngôi nhà chính theo cầu thang bộ
+            let floorHeight = 0;
+            state.isIndoors = false;
+            if (playerHouseInfo) {
+                const hb = playerHouseInfo;
+                if (player.pos.x >= hb.minX && player.pos.x <= hb.maxX && player.pos.z >= hb.minZ && player.pos.z <= hb.maxZ) {
+                    state.isIndoors = true;
+                    // Khu vực cầu thang bên phải nhà (x > hb.maxX - 4.2)
+                    if (player.pos.x > hb.maxX - 4.2 && player.pos.z <= hb.minZ + 9.5 && player.pos.z >= hb.minZ + 2.0) {
+                        const stairProgress = THREE.MathUtils.clamp(((hb.minZ + 9.5) - player.pos.z) / 6.5, 0, 1);
+                        floorHeight = stairProgress * 4.6;
+                    } else if (player.pos.y >= 3.8) {
+                        floorHeight = 4.6;
+                    }
+                }
+            }
+
             // Trọng lực & Nhảy (Jump)
             player.velY -= CONFIG.GRAVITY * dt;
             player.pos.y += player.velY * dt;
-            if (player.pos.y <= 0) {
-                player.pos.y = 0;
+            if (player.pos.y <= floorHeight) {
+                player.pos.y = floorHeight;
                 player.velY = 0;
                 player.isGrounded = true;
             }
@@ -2733,7 +3254,7 @@
             for (const st of stores) {
                 const d = player.pos.distanceTo(st.interactPos);
                 if (d < 3.4) {
-                    found = { kind: 'store', ref: st, label: `Nhấn <b>F / E</b> để mở ${st.title}` };
+                    found = { kind: 'store', ref: st, label: `Nhấn <b>TƯƠNG TÁC</b> để ${st.label}` };
                     bestDist = d;
                 }
             }
@@ -2744,7 +3265,8 @@
                     const d = player.pos.distanceTo(v.pos);
                     if (d < bestDist) {
                         bestDist = d;
-                        found = { kind: 'vehicle', ref: v, label: `Nhấn <b>F / E</b> để cướp ${v.name}` };
+                        const verb = v.isBicycle ? 'đi' : 'cướp';
+                        found = { kind: 'vehicle', ref: v, label: `Nhấn <b>TƯƠNG TÁC</b> để ${verb} ${v.name}` };
                     }
                 }
             }
@@ -2752,13 +3274,16 @@
             player.nearbyInteract = found;
         }
 
-        // --- CẬP NHẬT LÁI XE CỦA NGƯỜI CHƠI ---
+        // --- CẬP NHẬT LÁI XE & XE ĐẠP CỦA NGƯỜI CHƠI ---
         function updatePlayerVehicle(dt) {
             const v = player.inVehicle;
             if (!v) return;
 
-            const throttle = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
-            const steer = (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0) - (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0);
+            const kbThrottle = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
+            const kbSteer = (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0) - (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0);
+
+            const throttle = THREE.MathUtils.clamp(kbThrottle + (mobileInput.gas ? 1 : 0) - (mobileInput.reverse ? 1 : 0), -1, 1);
+            const steer = THREE.MathUtils.clamp(kbSteer + (mobileInput.steerLeft ? 1 : 0) - (mobileInput.steerRight ? 1 : 0), -1, 1);
             const handbrake = keys['Space'];
 
             if (throttle > 0) {
@@ -2817,14 +3342,231 @@
             player.pos.copy(v.pos);
             player.rotY = v.rotY;
 
+            // Nếu đang đi xe đạp thì hiển thị nhân vật ngồi trên yên xe và đạp chân
+            if (v.isBicycle) {
+                player.mesh.visible = true;
+                player.mesh.position.set(v.pos.x, v.pos.y + 0.42, v.pos.z);
+                player.mesh.rotation.y = v.rotY;
+                const ud = player.mesh.userData;
+                ud.walkCycle += dt * Math.abs(v.speed) * 0.9;
+                ud.leftLeg.hipPivot.rotation.x = -0.6 + Math.sin(ud.walkCycle) * 0.45;
+                ud.rightLeg.hipPivot.rotation.x = -0.6 - Math.sin(ud.walkCycle) * 0.45;
+                ud.leftArm.shoulderPivot.rotation.x = -0.85;
+                ud.rightArm.shoulderPivot.rotation.x = -0.85;
+            }
+
             if (v.health <= 0 && !v.isDestroyed) {
                 v.isDestroyed = true;
                 spawnParticles(v.pos, 25, 0xf97316, 12);
                 sound.playCrash(1.0);
-                handleInteractAction();
                 takePlayerDamage(45);
-                showToast('Xe của bạn đã phát nổ!');
+                handleInteractAction();
             }
+        }
+
+        // --- CẬP NHẬT CAMERA: KHÓA SAU ĐUÔI XE KHI LÁI, GÓC NHÌN GẦN KHI VÀO NHÀ & XOAY TỰ DO NGOÀI TRỜI ---
+        function updateCamera(dt) {
+            const targetPos = player.pos.clone();
+
+            if (player.inVehicle) {
+                const v = player.inVehicle;
+                targetPos.y += 1.65;
+
+                // Khóa hướng camera mượt mà phía sau đuôi xe theo hướng đầu xe (v.rotY)
+                const behindYaw = v.rotY + Math.PI;
+                let yawDiff = behindYaw - state.camYaw;
+                while (yawDiff < -Math.PI) yawDiff += Math.PI * 2;
+                while (yawDiff > Math.PI) yawDiff -= Math.PI * 2;
+                state.camYaw += yawDiff * Math.min(1, dt * 8.5);
+
+                const isFar = state.driveCamMode === 1;
+                const camDist = v.isBicycle ? 6.2 : (isFar ? 15.5 : 10.5);
+                const camHeight = v.isBicycle ? 2.8 : (isFar ? 6.4 : 4.2);
+
+                const fwd = new THREE.Vector3(Math.sin(v.rotY), 0, Math.cos(v.rotY));
+                const desiredCamPos = new THREE.Vector3()
+                    .copy(v.pos)
+                    .addScaledVector(fwd, -camDist)
+                    .add(new THREE.Vector3(0, camHeight, 0));
+
+                camera.position.lerp(desiredCamPos, Math.min(1, dt * 12));
+                const lookTarget = v.pos.clone().addScaledVector(fwd, 4.5).add(new THREE.Vector3(0, 1.35, 0));
+                camera.lookAt(lookTarget);
+            } else {
+                const curW = WEAPONS[player.weaponIndex];
+                const isAimingGun = curW.id === 'pistol' || curW.id === 'smg' || curW.id === 'shotgun';
+
+                // Khi cầm súng, dịch camera lệch sang vai phải để không bị đầu nhân vật che khuất tâm ngắm
+                const shoulderOffset = isAimingGun ? 1.25 : 0;
+                const camRight = new THREE.Vector3(Math.cos(state.camYaw), 0, -Math.sin(state.camYaw));
+
+                targetPos.y += isAimingGun ? 1.65 : 1.75;
+                targetPos.addScaledVector(camRight, shoulderOffset);
+
+                // Khi vào trong ngôi nhà 2 tầng, thu gọn khoảng cách camera để góc nhìn nằm gọn bên trong nhà
+                const camDist = state.isIndoors ? 3.2 : (isAimingGun ? 5.2 : 6.8);
+                const offsetX = Math.sin(state.camYaw) * Math.cos(state.camPitch) * camDist;
+                const offsetY = Math.sin(state.camPitch) * camDist + (state.isIndoors ? 0.65 : (isAimingGun ? 0.65 : 1.3));
+                const offsetZ = Math.cos(state.camYaw) * Math.cos(state.camPitch) * camDist;
+
+                let desiredCamX = targetPos.x + offsetX;
+                let desiredCamY = Math.max(player.pos.y + 1.1, targetPos.y + offsetY);
+                let desiredCamZ = targetPos.z + offsetZ;
+
+                // Giới hạn camera bên trong tường nhà khi ở trong nhà
+                if (state.isIndoors && playerHouseInfo) {
+                    desiredCamX = THREE.MathUtils.clamp(desiredCamX, playerHouseInfo.minX + 0.3, playerHouseInfo.maxX - 0.3);
+                    desiredCamZ = THREE.MathUtils.clamp(desiredCamZ, playerHouseInfo.minZ + 0.3, playerHouseInfo.maxZ - 0.3);
+                    desiredCamY = Math.min(desiredCamY, player.pos.y + 3.4);
+                }
+
+                const desiredCamPos = new THREE.Vector3(desiredCamX, desiredCamY, desiredCamZ);
+                camera.position.lerp(desiredCamPos, Math.min(1, dt * 15));
+
+                const aimLookTarget = targetPos.clone().add(new THREE.Vector3(
+                    -Math.sin(state.camYaw) * 12,
+                    -Math.sin(state.camPitch) * 8,
+                    -Math.cos(state.camYaw) * 12
+                ));
+                camera.lookAt(isAimingGun ? aimLookTarget : targetPos);
+            }
+
+            dirLight.position.set(player.pos.x + 70, 140, player.pos.z + 55);
+            dirLight.target.position.copy(player.pos);
+            dirLight.target.updateMatrixWorld();
+        }
+
+        // --- RADAR MINIMAP & BẢN ĐỒ TOÀN THÀNH PHỐ (FULL MAP) ---
+        const minimapCanvas = document.getElementById('minimap-canvas');
+        const mCtx = minimapCanvas.getContext('2d');
+        const fullmapCanvas = document.getElementById('fullmap-canvas');
+        const fCtx = fullmapCanvas.getContext('2d');
+
+        function drawCityMap(ctx, size, centerWorldX, centerWorldZ, scale, rotateYaw = 0) {
+            const cx = size / 2;
+            const cy = size / 2;
+
+            ctx.clearRect(0, 0, size, size);
+            ctx.save();
+            ctx.fillStyle = '#090d16';
+            ctx.fillRect(0, 0, size, size);
+
+            ctx.translate(cx, cy);
+            if (rotateYaw !== 0) ctx.rotate(rotateYaw);
+            ctx.translate(-centerWorldX * scale, -centerWorldZ * scale);
+
+            // Các ô phố
+            ctx.fillStyle = '#1e293b';
+            const lotSpan = (CONFIG.BLOCK_SIZE - CONFIG.ROAD_WIDTH) * scale;
+            for (let gx = -CONFIG.GRID_RADIUS; gx < CONFIG.GRID_RADIUS; gx++) {
+                for (let gz = -CONFIG.GRID_RADIUS; gz < CONFIG.GRID_RADIUS; gz++) {
+                    const bx = (gx + 0.5) * CONFIG.BLOCK_SIZE * scale - lotSpan / 2;
+                    const bz = (gz + 0.5) * CONFIG.BLOCK_SIZE * scale - lotSpan / 2;
+                    ctx.fillRect(bx, bz, lotSpan, lotSpan);
+                }
+            }
+
+            // Đường phố
+            ctx.fillStyle = '#475569';
+            const mapSpan = (WORLD_LIMIT + CONFIG.BLOCK_SIZE * 0.5) * scale;
+            const roadW = CONFIG.ROAD_WIDTH * scale;
+            roadCoords.forEach(coord => {
+                ctx.fillRect(coord * scale - roadW / 2, -mapSpan, roadW, mapSpan * 2);
+                ctx.fillRect(-mapSpan, coord * scale - roadW / 2, mapSpan * 2, roadW);
+            });
+
+            // Biểu tượng Ngôi Nhà 2 Tầng & Gara
+            if (playerHouseInfo) {
+                ctx.fillStyle = '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(playerHouseInfo.center.x * scale, playerHouseInfo.center.z * scale, 9, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // Biểu tượng 3 Cửa Hàng
+            stores.forEach(st => {
+                if (st.type.startsWith('house_')) return;
+                ctx.fillStyle = st.radarColor;
+                ctx.beginPath();
+                ctx.arc(st.interactPos.x * scale, st.interactPos.z * scale, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Xe cộ
+            vehicles.forEach(v => {
+                if (v === player.inVehicle) return;
+                const vx = v.pos.x * scale;
+                const vz = v.pos.z * scale;
+                ctx.beginPath();
+                if (v.ownedByPlayer) {
+                    ctx.fillStyle = '#10b981';
+                    ctx.arc(vx, vz, 6.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#facc15';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    return;
+                } else if (v.isPolice) {
+                    ctx.fillStyle = Math.sin(Date.now() * 0.015) > 0 ? '#ef4444' : '#3b82f6';
+                    ctx.arc(vx, vz, 6, 0, Math.PI * 2);
+                } else {
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.arc(vx, vz, 3.8, 0, Math.PI * 2);
+                }
+                ctx.fill();
+            });
+
+            // Vị trí người chơi trên bản đồ tĩnh
+            if (rotateYaw === 0) {
+                ctx.save();
+                ctx.translate(player.pos.x * scale, player.pos.z * scale);
+                ctx.rotate(-player.rotY);
+                ctx.fillStyle = '#facc15';
+                ctx.beginPath();
+                ctx.moveTo(0, -11);
+                ctx.lineTo(8, 9);
+                ctx.lineTo(0, 4);
+                ctx.lineTo(-8, 9);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            ctx.restore();
+
+            // Mũi tên người chơi ở tâm Radar xoay
+            if (rotateYaw !== 0) {
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.fillStyle = '#facc15';
+                ctx.beginPath();
+                ctx.moveTo(0, -10);
+                ctx.lineTo(7, 8);
+                ctx.lineTo(0, 4);
+                ctx.lineTo(-7, 8);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function renderMinimap() {
+            const size = minimapCanvas.width = minimapCanvas.clientWidth * 2;
+            minimapCanvas.height = size;
+            drawCityMap(mCtx, size, player.pos.x, player.pos.z, size / 200, state.camYaw);
+        }
+
+        function renderFullMap() {
+            const size = fullmapCanvas.width = fullmapCanvas.clientWidth * 2;
+            fullmapCanvas.height = size;
+            const worldSpan = (WORLD_LIMIT * 2) + CONFIG.BLOCK_SIZE;
+            drawCityMap(fCtx, size, 0, 0, size / worldSpan, 0);
         }
 
         // --- CẬP NHẬT AI GIAO THÔNG & CẢNH SÁT + VẬT LÝ TÔNG VĂNG CHỐNG DÍNH ---
@@ -3126,154 +3868,11 @@
             document.getElementById('final-cars').textContent = state.carsStolen;
 
             document.getElementById('hud').classList.add('hidden');
-            document.getElementById('mobile-controls').classList.add('hidden');
+            document.getElementById('mobile-foot-controls').classList.add('hidden');
+            document.getElementById('mobile-drive-controls').classList.add('hidden');
+            document.getElementById('touch-look-zone').classList.add('hidden');
             document.getElementById('crosshair').classList.add('hidden');
             document.getElementById('gameover-screen').classList.remove('hidden');
-        }
-
-        // --- CẬP NHẬT CAMERA: KHÓA SAU ĐUÔI XE KHI LÁI & XOAY TỰ DO 360° KHI ĐI BỘ ---
-        function updateCamera(dt) {
-            const targetPos = player.pos.clone();
-
-            if (player.inVehicle) {
-                const v = player.inVehicle;
-                targetPos.y += 1.65;
-
-                // Khóa hướng camera mượt mà phía sau đuôi xe theo hướng đầu xe (v.rotY)
-                const behindYaw = v.rotY + Math.PI;
-                let yawDiff = behindYaw - state.camYaw;
-                while (yawDiff < -Math.PI) yawDiff += Math.PI * 2;
-                while (yawDiff > Math.PI) yawDiff -= Math.PI * 2;
-                state.camYaw += yawDiff * Math.min(1, dt * 8.5);
-
-                const isFar = state.driveCamMode === 1;
-                const camDist = isFar ? 15.5 : 10.5;
-                const camHeight = isFar ? 6.4 : 4.2;
-
-                const fwd = new THREE.Vector3(Math.sin(v.rotY), 0, Math.cos(v.rotY));
-                const desiredCamPos = new THREE.Vector3()
-                    .copy(v.pos)
-                    .addScaledVector(fwd, -camDist)
-                    .add(new THREE.Vector3(0, camHeight, 0));
-
-                camera.position.lerp(desiredCamPos, Math.min(1, dt * 12));
-                const lookTarget = v.pos.clone().addScaledVector(fwd, 4.5).add(new THREE.Vector3(0, 1.35, 0));
-                camera.lookAt(lookTarget);
-            } else {
-                const curW = WEAPONS[player.weaponIndex];
-                const isAimingGun = curW.id === 'pistol' || curW.id === 'smg' || curW.id === 'shotgun';
-
-                // Khi cầm súng, dịch camera lệch sang vai phải (Over-the-Shoulder) để đầu nhân vật không che khuất tâm ngắm
-                const shoulderOffset = isAimingGun ? 1.25 : 0;
-                const camRight = new THREE.Vector3(Math.cos(state.camYaw), 0, -Math.sin(state.camYaw));
-
-                targetPos.y += isAimingGun ? 1.65 : 1.75;
-                targetPos.addScaledVector(camRight, shoulderOffset);
-
-                const camDist = isAimingGun ? 5.2 : 6.8;
-                const offsetX = Math.sin(state.camYaw) * Math.cos(state.camPitch) * camDist;
-                const offsetY = Math.sin(state.camPitch) * camDist + (isAimingGun ? 0.65 : 1.3);
-                const offsetZ = Math.cos(state.camYaw) * Math.cos(state.camPitch) * camDist;
-
-                const desiredCamPos = new THREE.Vector3(
-                    targetPos.x + offsetX,
-                    Math.max(1.3, targetPos.y + offsetY),
-                    targetPos.z + offsetZ
-                );
-
-                camera.position.lerp(desiredCamPos, Math.min(1, dt * 15));
-                const aimLookTarget = targetPos.clone().add(new THREE.Vector3(
-                    -Math.sin(state.camYaw) * 12,
-                    -Math.sin(state.camPitch) * 8,
-                    -Math.cos(state.camYaw) * 12
-                ));
-                camera.lookAt(isAimingGun ? aimLookTarget : targetPos);
-            }
-
-            dirLight.position.set(player.pos.x + 70, 140, player.pos.z + 55);
-            dirLight.target.position.copy(player.pos);
-            dirLight.target.updateMatrixWorld();
-        }
-
-        // --- RADAR MINIMAP HIỂN THỊ CỬA HÀNG, XE SỞ HỮU, XE CỘ & CẢNH SÁT ---
-        const minimapCanvas = document.getElementById('minimap-canvas');
-        const mCtx = minimapCanvas.getContext('2d');
-
-        function renderMinimap() {
-            const size = minimapCanvas.width = minimapCanvas.clientWidth * 2;
-            minimapCanvas.height = size;
-            const cx = size / 2;
-            const cy = size / 2;
-            const scale = size / 200;
-
-            mCtx.clearRect(0, 0, size, size);
-            mCtx.save();
-
-            mCtx.fillStyle = '#090d16';
-            mCtx.fillRect(0, 0, size, size);
-
-            mCtx.translate(cx, cy);
-            mCtx.rotate(state.camYaw);
-            mCtx.translate(-player.pos.x * scale, -player.pos.z * scale);
-
-            // Đường phố
-            mCtx.fillStyle = '#334155';
-            const mapSpan = (WORLD_LIMIT + CONFIG.BLOCK_SIZE) * scale;
-            const roadW = CONFIG.ROAD_WIDTH * scale;
-            roadCoords.forEach(coord => {
-                mCtx.fillRect(coord * scale - roadW / 2, -mapSpan, roadW, mapSpan * 2);
-                mCtx.fillRect(-mapSpan, coord * scale - roadW / 2, mapSpan * 2, roadW);
-            });
-
-            // Biểu tượng 3 Cửa Hàng trên Radar
-            stores.forEach(st => {
-                mCtx.fillStyle = st.radarColor;
-                mCtx.beginPath();
-                mCtx.arc(st.interactPos.x * scale, st.interactPos.z * scale, 8.5, 0, Math.PI * 2);
-                mCtx.fill();
-                mCtx.strokeStyle = '#ffffff';
-                mCtx.lineWidth = 2;
-                mCtx.stroke();
-            });
-
-            // Xe cộ
-            vehicles.forEach(v => {
-                if (v === player.inVehicle) return;
-                const vx = v.pos.x * scale;
-                const vz = v.pos.z * scale;
-                mCtx.beginPath();
-                if (v.ownedByPlayer) {
-                    mCtx.fillStyle = '#10b981';
-                    mCtx.arc(vx, vz, 6.5, 0, Math.PI * 2);
-                    mCtx.fill();
-                    mCtx.strokeStyle = '#facc15';
-                    mCtx.lineWidth = 2;
-                    mCtx.stroke();
-                    return;
-                } else if (v.isPolice) {
-                    mCtx.fillStyle = Math.sin(Date.now() * 0.015) > 0 ? '#ef4444' : '#3b82f6';
-                    mCtx.arc(vx, vz, 6.5, 0, Math.PI * 2);
-                } else {
-                    mCtx.fillStyle = '#94a3b8';
-                    mCtx.arc(vx, vz, 4, 0, Math.PI * 2);
-                }
-                mCtx.fill();
-            });
-
-            mCtx.restore();
-
-            // Mũi tên người chơi
-            mCtx.save();
-            mCtx.translate(cx, cy);
-            mCtx.fillStyle = '#facc15';
-            mCtx.beginPath();
-            mCtx.moveTo(0, -10);
-            mCtx.lineTo(7, 8);
-            mCtx.lineTo(0, 4);
-            mCtx.lineTo(-7, 8);
-            mCtx.closePath();
-            mCtx.fill();
-            mCtx.restore();
         }
 
         // --- CẬP NHẬT HUD ---
@@ -3289,9 +3888,9 @@
                 const w = WEAPONS[idx];
                 el.style.opacity = w.owned ? '1' : '0.35';
                 if (idx === player.weaponIndex) {
-                    el.className = 'w-12 h-12 rounded-xl border-2 border-amber-400 bg-slate-800 flex flex-col items-center justify-center text-[10px] text-amber-300 font-bold scale-105 transition';
+                    el.className = 'cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-amber-400 bg-slate-800 flex flex-col items-center justify-center text-[10px] text-amber-300 font-bold scale-105 transition';
                 } else {
-                    el.className = 'w-12 h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-300 font-bold transition';
+                    el.className = 'cursor-pointer w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-700 bg-slate-900/70 flex flex-col items-center justify-center text-[10px] text-slate-300 font-bold transition';
                 }
             });
 
@@ -3308,192 +3907,121 @@
 
             if (state.wantedLevel > 0) {
                 wantedBanner.classList.remove('hidden');
-                const polMax = getMaxPoliceForWanted(state.wantedLevel);
                 if (state.isEscaping) {
                     statusText.textContent = 'ĐANG CẮT ĐUÔI CẢNH SÁT...';
-                    statusText.className = 'font-gta text-xs sm:text-sm font-bold uppercase tracking-wider text-sky-400';
+                    statusText.classList.remove('siren-alert');
+                    statusText.classList.add('text-sky-400');
                     escapeBar.style.width = `${Math.min(100, (state.escapeTimer / CONFIG.ESCAPE_TIME) * 100)}%`;
                 } else {
-                    statusText.textContent = `TRUY NÃ ${state.wantedLevel} SAO (${polMax} XE CẢNH SÁT)`;
-                    statusText.className = 'font-gta text-xs sm:text-sm font-bold uppercase tracking-wider siren-alert';
+                    statusText.textContent = `TRUY NÃ CẤP ${state.wantedLevel}!`;
+                    statusText.classList.add('siren-alert');
+                    statusText.classList.remove('text-sky-400');
                     escapeBar.style.width = '0%';
                 }
             } else {
                 wantedBanner.classList.add('hidden');
             }
 
-            // Thanh Bị Bắt
-            const bustWrap = document.getElementById('bust-progress-wrap');
-            if (state.bustTimer > 0.15 && state.wantedLevel > 0) {
-                bustWrap.classList.remove('hidden');
-                const pct = Math.min(100, Math.round((state.bustTimer / CONFIG.BUST_TIME) * 100));
-                document.getElementById('bust-pct').textContent = `${pct}%`;
-                document.getElementById('bust-bar').style.width = `${pct}%`;
-            } else {
-                bustWrap.classList.add('hidden');
-            }
+            // Máu / Độ bền xe, Giáp, Thể lực
+            const hpLabel = document.getElementById('health-label');
+            const hpVal = document.getElementById('health-val');
+            const hpBar = document.getElementById('health-bar');
 
-            // Máu, Giáp, Thể lực
-            const healthLabel = document.getElementById('health-label');
-            const healthVal = document.getElementById('health-val');
-            const healthBar = document.getElementById('health-bar');
-            const speedoEl = document.getElementById('speedometer');
-            const crosshair = document.getElementById('crosshair');
-
-            const mobileControls = document.getElementById('mobile-controls');
-            if (mobileControls) mobileControls.classList.toggle('driving', !!player.inVehicle);
             if (player.inVehicle) {
-                speedoEl.classList.remove('hidden');
-                crosshair.classList.add('hidden');
-                document.getElementById('speed-val').textContent = Math.round(Math.abs(player.inVehicle.speed) * 3.4);
-                document.getElementById('vehicle-name').textContent = player.inVehicle.name;
-
-                const ownedBadge = document.getElementById('owned-car-badge');
-                if (player.inVehicle.ownedByPlayer) ownedBadge.classList.remove('hidden');
-                else ownedBadge.classList.add('hidden');
-
-                const hpPct = Math.max(0, Math.round((player.inVehicle.health / player.inVehicle.maxHealth) * 100));
-                healthLabel.textContent = 'Độ bền xe';
-                healthVal.textContent = `${hpPct}%`;
-                healthBar.style.width = `${hpPct}%`;
+                const pct = Math.max(0, Math.round((player.inVehicle.health / player.inVehicle.maxHealth) * 100));
+                hpLabel.textContent = 'Độ bền xe';
+                hpVal.textContent = `${pct}%`;
+                hpBar.style.width = `${pct}%`;
             } else {
-                speedoEl.classList.add('hidden');
-                crosshair.classList.remove('hidden');
-                const hp = Math.round(player.health);
-                healthLabel.textContent = 'Máu (HP)';
-                healthVal.textContent = `${hp}%`;
-                healthBar.style.width = `${hp}%`;
+                const pct = Math.max(0, Math.round(player.health));
+                hpLabel.textContent = 'Máu (HP)';
+                hpVal.textContent = `${pct}%`;
+                hpBar.style.width = `${pct}%`;
             }
 
             document.getElementById('armor-val').textContent = `${Math.round(player.armor)}%`;
             document.getElementById('armor-bar').style.width = `${player.armor}%`;
+
             document.getElementById('stamina-val').textContent = `${Math.round(player.stamina)}%`;
             document.getElementById('stamina-bar').style.width = `${player.stamina}%`;
 
-            // Thông báo tương tác cướp xe / lên xe của bạn / mở cửa hàng
+            // Thanh bị bắt
+            const bustWrap = document.getElementById('bust-progress-wrap');
+            if (state.bustTimer > 0.05) {
+                bustWrap.classList.remove('hidden');
+                const bp = Math.min(100, Math.round((state.bustTimer / CONFIG.BUST_TIME) * 100));
+                document.getElementById('bust-pct').textContent = `${bp}%`;
+                document.getElementById('bust-bar').style.width = `${bp}%`;
+            } else {
+                bustWrap.classList.add('hidden');
+            }
+
+            // Gợi ý tương tác & Đồng hồ tốc độ
             const promptEl = document.getElementById('interact-prompt');
-            if (!player.inVehicle && player.nearbyInteract) {
-                if (player.nearbyInteract.kind === 'vehicle' && player.nearbyInteract.ref.ownedByPlayer) {
-                    document.getElementById('interact-text').innerHTML = `Nhấn <b>F / E</b> để lái ${player.nearbyInteract.ref.name} <span class="text-emerald-400">(Xe của bạn)</span>`;
-                } else {
-                    document.getElementById('interact-text').innerHTML = player.nearbyInteract.label;
-                }
-                promptEl.classList.remove('hidden');
-            } else {
+            const speedoEl = document.getElementById('speedometer');
+            const crosshairEl = document.getElementById('crosshair');
+
+            if (player.inVehicle) {
                 promptEl.classList.add('hidden');
-            }
-        }
-
-        function showToast(msg) {
-            const el = document.getElementById('toast-msg');
-            el.textContent = msg;
-            el.style.opacity = '1';
-            clearTimeout(el._timer);
-            el._timer = setTimeout(() => { el.style.opacity = '0'; }, 2500);
-        }
-
-        // --- QUẢN LÝ POINTER LOCK API (KHÓA CON TRỎ CHUỘT XOAY TỰ DO) ---
-        function isTouchMobile() {
-            return (('ontouchstart' in window) || navigator.maxTouchPoints > 0) && window.innerWidth <= 1100;
-        }
-        function requestGamePointerLock() {
-            // Điện thoại dùng vuốt màn hình để xoay camera, không yêu cầu Pointer Lock.
-            if (isTouchMobile()) {
-                document.getElementById('pointer-lock-banner').classList.add('hidden');
-                return;
-            }
-            if (canvas.requestPointerLock) canvas.requestPointerLock();
-        }
-
-        document.addEventListener('pointerlockchange', () => {
-            const locked = document.pointerLockElement === canvas;
-            const lockBanner = document.getElementById('pointer-lock-banner');
-            if (isTouchMobile()) {
-                lockBanner.classList.add('hidden');
-            } else if (state.started && !state.gameOver && !state.shopOpen) {
-                if (locked) lockBanner.classList.add('hidden');
-                else lockBanner.classList.remove('hidden');
+                crosshairEl.classList.add('hidden');
+                speedoEl.classList.remove('hidden');
+                const kmh = Math.round(Math.abs(player.inVehicle.speed) * 3.8);
+                document.getElementById('speed-val').textContent = kmh;
+                document.getElementById('vehicle-name').textContent = player.inVehicle.name;
+                const ownedBadge = document.getElementById('owned-car-badge');
+                if (player.inVehicle.ownedByPlayer) ownedBadge.classList.remove('hidden');
+                else ownedBadge.classList.add('hidden');
             } else {
-                lockBanner.classList.add('hidden');
-            }
-        });
-
-        canvas.addEventListener('click', () => {
-            if (state.started && !state.gameOver && !state.shopOpen) {
-                if (document.pointerLockElement !== canvas) {
-                    requestGamePointerLock();
+                speedoEl.classList.add('hidden');
+                crosshairEl.classList.remove('hidden');
+                if (player.nearbyInteract) {
+                    promptEl.classList.remove('hidden');
+                    document.getElementById('interact-text').innerHTML = player.nearbyInteract.label;
                 } else {
-                    performAttack();
+                    promptEl.classList.add('hidden');
                 }
             }
-        });
+        }
 
-        window.addEventListener('mousemove', (e) => {
-            if (!state.started || state.gameOver || state.shopOpen) return;
-            // Khi đang lái xe, camera được khóa cố định sau đuôi xe để dễ điều khiển; khi đi bộ thì xoay 360° tự do
-            if (player.inVehicle) return;
-            if (document.pointerLockElement === canvas) {
-                state.camYaw -= e.movementX * 0.0024;
-                state.camPitch = THREE.MathUtils.clamp(state.camPitch + e.movementY * 0.002, -0.15, 1.15);
-            }
-        });
-
-        window.addEventListener('mousedown', (e) => {
-            if (e.button === 0 && document.pointerLockElement === canvas) {
-                state.isMouseDown = true;
-                performAttack();
-            }
-        });
-
-        window.addEventListener('mouseup', (e) => {
-            if (e.button === 0) state.isMouseDown = false;
-        });
-
-        // Đổi vũ khí bằng con lăn chuột hoặc phím 1-5
-        window.addEventListener('wheel', (e) => {
-            if (!state.started || state.gameOver || state.shopOpen) return;
-            const dir = e.deltaY > 0 ? 1 : -1;
-            for (let step = 1; step <= WEAPONS.length; step++) {
-                const nextIdx = (player.weaponIndex + dir * step + WEAPONS.length) % WEAPONS.length;
-                if (WEAPONS[nextIdx].owned) {
-                    player.weaponIndex = nextIdx;
-                    updatePlayerVisualEquipment();
-                    break;
-                }
-            }
-        }, { passive: true });
-
+        // --- ĐIỀU KHIỂN BÀN PHÍM & CHUỘT (PC) ---
         window.addEventListener('keydown', (e) => {
             keys[e.code] = true;
 
-            if (e.code === 'Escape' && state.shopOpen) {
-                closeStoreModal();
-                return;
+            if (e.code === 'Escape') {
+                if (state.shopOpen) closeStoreModal();
+                if (state.mapOpen) closeFullMap();
             }
 
-            if ((e.code === 'KeyF' || e.code === 'KeyE') && !e.repeat) {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen) return;
+
+            if (e.code === 'KeyF' || e.code === 'KeyE') {
                 handleInteractAction();
             }
 
-            // Phím C đổi góc nhìn xa / gần khi lái xe
-            if (e.code === 'KeyC' && !e.repeat && player.inVehicle) {
-                state.driveCamMode = (state.driveCamMode + 1) % 2;
-                showToast(state.driveCamMode === 0 ? 'Góc nhìn lái xe: Tiêu chuẩn' : 'Góc nhìn lái xe: Toàn cảnh');
-            }
-
-            // Nhảy (Jump) khi đang đi bộ
-            if (e.code === 'Space' && !e.repeat && !player.inVehicle && player.isGrounded && player.knockdownTimer <= 0 && !state.shopOpen) {
+            if (e.code === 'Space' && !player.inVehicle && player.isGrounded && player.knockdownTimer <= 0) {
                 player.velY = CONFIG.JUMP_FORCE;
                 player.isGrounded = false;
                 sound.playJump();
             }
 
-            // Chọn nhanh vũ khí phím 1-5
+            if (e.code === 'KeyC' && player.inVehicle) {
+                state.driveCamMode = (state.driveCamMode + 1) % 2;
+                showToast(state.driveCamMode === 0 ? 'Góc nhìn lái xe: Tiêu chuẩn' : 'Góc nhìn lái xe: Toàn cảnh');
+            }
+
+            if (e.code === 'KeyM') {
+                openFullMap();
+            }
+
             if (e.code.startsWith('Digit')) {
-                const num = parseInt(e.code.replace('Digit', ''), 10) - 1;
-                if (num >= 0 && num < WEAPONS.length && WEAPONS[num].owned) {
-                    player.weaponIndex = num;
-                    updatePlayerVisualEquipment();
+                const idx = parseInt(e.code.replace('Digit', ''), 10) - 1;
+                if (idx >= 0 && idx < WEAPONS.length) {
+                    if (WEAPONS[idx].owned) {
+                        player.weaponIndex = idx;
+                        updatePlayerVisualEquipment();
+                    } else {
+                        showToast('Chưa sở hữu vũ khí này! Hãy đến Ammu-Nation.');
+                    }
                 }
             }
         });
@@ -3502,12 +4030,256 @@
             keys[e.code] = false;
         });
 
+        document.addEventListener('pointerlockchange', () => {
+            const locked = document.pointerLockElement === canvas;
+            const banner = document.getElementById('pointer-lock-banner');
+            const isTouchDevice = 'ontouchstart' in window && navigator.maxTouchPoints > 0;
+            if (state.started && !state.gameOver && !state.shopOpen && !state.mapOpen && !locked && !isTouchDevice) {
+                banner.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen) return;
+            if (document.pointerLockElement === canvas && !player.inVehicle) {
+                state.camYaw -= e.movementX * 0.0032;
+                state.camPitch = THREE.MathUtils.clamp(state.camPitch + e.movementY * 0.0028, -0.15, 1.15);
+            }
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen) return;
+            if (e.target === canvas) {
+                requestGamePointerLock();
+                if (e.button === 0) {
+                    state.isMouseDown = true;
+                    performAttack();
+                }
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (e.button === 0) state.isMouseDown = false;
+        });
+
+        window.addEventListener('wheel', (e) => {
+            if (!state.started || state.gameOver || state.shopOpen || state.mapOpen || player.inVehicle) return;
+            const dir = e.deltaY > 0 ? 1 : -1;
+            for (let step = 1; step <= WEAPONS.length; step++) {
+                const next = (player.weaponIndex + dir * step + WEAPONS.length) % WEAPONS.length;
+                if (WEAPONS[next].owned) {
+                    player.weaponIndex = next;
+                    updatePlayerVisualEquipment();
+                    break;
+                }
+            }
+        });
+
+        // --- CHUYỂN ĐỔI GIAO DIỆN ĐIỀU KHIỂN ĐI BỘ / LÁI XE ---
+        function updateControlModeUI() {
+            const footCtrl = document.getElementById('mobile-foot-controls');
+            const driveCtrl = document.getElementById('mobile-drive-controls');
+            const lookZone = document.getElementById('touch-look-zone');
+
+            if (!state.started || state.gameOver) {
+                footCtrl.classList.add('hidden');
+                driveCtrl.classList.add('hidden');
+                lookZone.classList.add('hidden');
+                return;
+            }
+
+            if (player.inVehicle) {
+                footCtrl.classList.add('hidden');
+                driveCtrl.classList.remove('hidden');
+                lookZone.classList.add('hidden'); // Khóa góc nhìn khi lái xe để dễ điều khiển
+            } else {
+                footCtrl.classList.remove('hidden');
+                driveCtrl.classList.add('hidden');
+                lookZone.classList.remove('hidden'); // Cho phép vuốt màn hình nhìn xung quanh khi đi bộ
+            }
+        }
+
+        // --- MỞ / ĐÓNG BẢN ĐỒ TOÀN CẢNH KHI NHẤN VÀO MINIMAP ---
+        function openFullMap() {
+            if (!state.started || state.gameOver) return;
+            state.mapOpen = true;
+            if (document.pointerLockElement) document.exitPointerLock();
+            document.getElementById('fullmap-modal').classList.remove('hidden');
+            renderFullMap();
+        }
+
+        function closeFullMap() {
+            state.mapOpen = false;
+            document.getElementById('fullmap-modal').classList.add('hidden');
+            requestGamePointerLock();
+        }
+
+        document.getElementById('minimap-wrapper').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openFullMap();
+        });
+        document.getElementById('btn-close-map').addEventListener('click', closeFullMap);
+
+        // Chạm chọn vũ khí trực tiếp trên thanh vũ khí
+        document.querySelectorAll('#weapon-bar div').forEach((el, idx) => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (WEAPONS[idx].owned) {
+                    player.weaponIndex = idx;
+                    updatePlayerVisualEquipment();
+                } else {
+                    showToast('Chưa sở hữu vũ khí này! Hãy đến Ammu-Nation.');
+                }
+            });
+        });
+
+        // --- CẢM ỨNG JOYSTICK, NÚT BẤM MOBILE & VUỐT XOAY GÓC NHÌN ---
+        const joyBase = document.getElementById('joystick-base');
+        const joyStick = document.getElementById('joystick-stick');
+        let joyTouchId = null;
+
+        joyBase.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const t = e.changedTouches[0];
+            joyTouchId = t.identifier;
+            updateJoystickPosition(t);
+        }, { passive: false });
+
+        joyBase.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === joyTouchId) {
+                    updateJoystickPosition(e.changedTouches[i]);
+                }
+            }
+        }, { passive: false });
+
+        function resetJoystick() {
+            joyTouchId = null;
+            mobileInput.joyX = 0;
+            mobileInput.joyY = 0;
+            joyStick.style.transform = 'translate(0px, 0px)';
+        }
+
+        joyBase.addEventListener('touchend', (e) => {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === joyTouchId) resetJoystick();
+            }
+        });
+        joyBase.addEventListener('touchcancel', resetJoystick);
+
+        function updateJoystickPosition(touch) {
+            const rect = joyBase.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const maxDist = rect.width * 0.36;
+
+            let dx = touch.clientX - centerX;
+            let dy = touch.clientY - centerY;
+            const dist = Math.hypot(dx, dy);
+            if (dist > maxDist) {
+                dx = (dx / dist) * maxDist;
+                dy = (dy / dist) * maxDist;
+            }
+            joyStick.style.transform = `translate(${dx}px, ${dy}px)`;
+            mobileInput.joyX = dx / maxDist;
+            mobileInput.joyY = dy / maxDist;
+        }
+
+        // Vuốt trên màn hình để xoay góc nhìn 360° xung quanh (Touch Look)
+        const lookZone = document.getElementById('touch-look-zone');
+        let lookTouchId = null;
+        let lastLookX = 0, lastLookY = 0;
+
+        lookZone.addEventListener('touchstart', (e) => {
+            if (lookTouchId !== null) return;
+            const t = e.changedTouches[0];
+            lookTouchId = t.identifier;
+            lastLookX = t.clientX;
+            lastLookY = t.clientY;
+        }, { passive: true });
+
+        lookZone.addEventListener('touchmove', (e) => {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const t = e.changedTouches[i];
+                if (t.identifier === lookTouchId) {
+                    const dx = t.clientX - lastLookX;
+                    const dy = t.clientY - lastLookY;
+                    lastLookX = t.clientX;
+                    lastLookY = t.clientY;
+                    state.camYaw -= dx * 0.0055;
+                    state.camPitch = THREE.MathUtils.clamp(state.camPitch + dy * 0.0045, -0.15, 1.15);
+                }
+            }
+        }, { passive: true });
+
+        lookZone.addEventListener('touchend', (e) => {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === lookTouchId) lookTouchId = null;
+            }
+        });
+
+        // Gắn sự kiện các nút cảm ứng đi bộ & lái xe
+        function bindHoldFlag(btnId, flagName) {
+            const el = document.getElementById(btnId);
+            el.addEventListener('touchstart', (e) => { e.preventDefault(); mobileInput[flagName] = true; }, { passive: false });
+            el.addEventListener('touchend', (e) => { e.preventDefault(); mobileInput[flagName] = false; }, { passive: false });
+            el.addEventListener('touchcancel', () => { mobileInput[flagName] = false; });
+        }
+
+        bindHoldFlag('m-sprint', 'sprint');
+        bindHoldFlag('m-gas', 'gas');
+        bindHoldFlag('m-reverse', 'reverse');
+        bindHoldFlag('m-steer-left', 'steerLeft');
+        bindHoldFlag('m-steer-right', 'steerRight');
+
+        document.getElementById('m-jump').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!player.inVehicle && player.isGrounded && player.knockdownTimer <= 0) {
+                player.velY = CONFIG.JUMP_FORCE;
+                player.isGrounded = false;
+                sound.playJump();
+            }
+        }, { passive: false });
+
+        document.getElementById('m-interact').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInteractAction();
+        }, { passive: false });
+
+        document.getElementById('m-exit-car').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInteractAction();
+        }, { passive: false });
+
+        document.getElementById('m-cam-toggle').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (player.inVehicle) {
+                state.driveCamMode = (state.driveCamMode + 1) % 2;
+                showToast(state.driveCamMode === 0 ? 'Góc nhìn lái xe: Tiêu chuẩn' : 'Góc nhìn lái xe: Toàn cảnh');
+            }
+        }, { passive: false });
+
+        const mAttackBtn = document.getElementById('m-attack');
+        mAttackBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            state.isMouseDown = true;
+            performAttack();
+        }, { passive: false });
+        mAttackBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            state.isMouseDown = false;
+        }, { passive: false });
+
         // --- NÚT UI & KHỞI ĐỘNG ---
         function startGame() {
             sound.init();
             state.started = true;
             state.gameOver = false;
             state.shopOpen = false;
+            state.mapOpen = false;
             state.cash = 1800;
             state.carsStolen = 0;
             state.wantedLevel = 0;
@@ -3518,6 +4290,7 @@
             state.isEscaping = false;
             state.bustTimer = 0;
             state.driveCamMode = 0;
+            state.gameHour = 8.5;
 
             WEAPONS.forEach((w, i) => {
                 w.owned = (i === 0);
@@ -3545,9 +4318,14 @@
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('gameover-screen').classList.add('hidden');
             document.getElementById('shop-modal').classList.add('hidden');
+            document.getElementById('fullmap-modal').classList.add('hidden');
             document.getElementById('hud').classList.remove('hidden');
-            document.getElementById('mobile-controls').classList.remove('hidden');
-            document.getElementById('mobile-controls').classList.remove('driving');
+            updateControlModeUI();
+
+            // Tự động thử khóa ngang màn hình trên thiết bị di động nếu trình duyệt hỗ trợ
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(() => {});
+            }
 
             requestGamePointerLock();
         }
@@ -3563,89 +4341,11 @@
             document.getElementById('audio-icon').textContent = on ? '🔊' : '🔇';
         });
 
-        // Vuốt trên vùng màn hình trống để xoay camera (đi bộ và lái xe).
-        let lookTouchId = null, lookLastX = 0, lookLastY = 0;
-        canvas.addEventListener('touchstart', (e) => {
-            if (!state.started || state.gameOver || state.shopOpen) return;
-            const t = e.changedTouches[0];
-            if (t.clientX > window.innerWidth * 0.34) { lookTouchId=t.identifier; lookLastX=t.clientX; lookLastY=t.clientY; }
-        }, {passive:true});
-        canvas.addEventListener('touchmove', (e) => {
-            if (lookTouchId === null) return;
-            const t = [...e.changedTouches].find(x=>x.identifier===lookTouchId); if(!t) return;
-            const dx=t.clientX-lookLastX, dy=t.clientY-lookLastY; lookLastX=t.clientX; lookLastY=t.clientY;
-            state.camYaw -= dx*0.0095;
-            state.camPitch = THREE.MathUtils.clamp(state.camPitch + dy*0.006, -0.15, 1.15);
-            if(player.inVehicle) player.inVehicle.rotY = state.camYaw - Math.PI;
-            e.preventDefault();
-        }, {passive:false});
-        const clearLookTouch=(e)=>{if([...e.changedTouches].some(t=>t.identifier===lookTouchId))lookTouchId=null;};
-        canvas.addEventListener('touchend',clearLookTouch); canvas.addEventListener('touchcancel',clearLookTouch);
-        function bindHoldKey(btnId, keyCode) {
-            const el = document.getElementById(btnId);
-            const down = e => { e.preventDefault(); keys[keyCode] = true; if (el.setPointerCapture && e.pointerId !== undefined) { try { el.setPointerCapture(e.pointerId); } catch(_){} } };
-            const up = e => { e.preventDefault(); keys[keyCode] = false; };
-            el.addEventListener('pointerdown', down);
-            ['pointerup','pointercancel','lostpointercapture'].forEach(type=>el.addEventListener(type,up));
-        }
-        // Joystick đa hướng, dùng pointer capture để không mất điều khiển khi ngón tay trượt ra ngoài vòng.
-        const joy=document.getElementById('mobile-joystick'), knob=document.getElementById('joystick-knob');
-        let joyId=null;
-        function setJoy(e){
-            const r=joy.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
-            const dx=e.clientX-cx, dy=e.clientY-cy, max=r.width*.36, len=Math.hypot(dx,dy)||1, scale=Math.min(1,max/len);
-            const x=dx*scale,y=dy*scale, dead=r.width*.13;
-            knob.style.transform=`translate(${x}px,${y}px)`;
-            keys.KeyA=x < -dead; keys.KeyD=x > dead; keys.KeyW=y < -dead; keys.KeyS=y > dead;
-        }
-        joy.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;try{joy.setPointerCapture(joyId)}catch(_){}setJoy(e);});
-        joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId){e.preventDefault();setJoy(e);}});
-        const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;knob.style.transform='translate(0,0)';keys.KeyW=keys.KeyA=keys.KeyS=keys.KeyD=false;};
-        joy.addEventListener('pointerup',joyEnd);joy.addEventListener('pointercancel',joyEnd);joy.addEventListener('lostpointercapture',joyEnd);
-        
-        bindHoldKey('m-turn-left','KeyA'); bindHoldKey('m-turn-right','KeyD');
-        bindHoldKey('m-forward','KeyW'); bindHoldKey('m-reverse','KeyS');
-        // Chạm minimap để phóng to/thu nhỏ, không cần nút MAP riêng.
-        const minimapWrap=document.getElementById('minimap-wrap');
-        minimapWrap.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();minimapWrap.classList.toggle('map-expanded');});
-        minimapWrap.addEventListener('pointerdown',e=>e.stopPropagation());
-        document.getElementById('m-jump').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!player.inVehicle && player.isGrounded) {
-                player.velY = CONFIG.JUMP_FORCE;
-                player.isGrounded = false;
-                sound.playJump();
-            }
-        });
-        document.getElementById('m-action').addEventListener('touchstart', (e) => { e.preventDefault(); handleInteractAction(); });
-        document.getElementById('m-attack').addEventListener('touchstart', (e) => { e.preventDefault(); performAttack(); });
-
-        const updateOrientationHint=()=>{const hint=document.getElementById('landscape-hint'); if(hint)hint.style.display=(window.innerWidth<window.innerHeight && window.innerWidth<900)?'flex':'none';};
-        updateOrientationHint();
         window.addEventListener('resize', () => {
-            updateOrientationHint();
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        // Chu kỳ ngày/đêm: 1 giờ thực tế tương đương 5 phút trong game.
-        let worldTime=8*60; // phút trong ngày, bắt đầu lúc 08:00
-        function updateDayNight(dt){
-            worldTime=(worldTime+dt*1)%1440; // 1 game-minute per real second
-            const phase=(worldTime/1440)*Math.PI*2-Math.PI/2;
-            const daylight=Math.max(0,Math.sin(phase));
-            const dusk=Math.max(0,1-Math.abs(daylight)*1.8);
-            const skyDay=new THREE.Color(0x7dd3fc), skyNight=new THREE.Color(0x071326);
-            scene.background.copy(skyNight).lerp(skyDay,daylight);
-            scene.fog.color.copy(scene.background);
-            dirLight.intensity=0.08+daylight*1.05;
-            hemiLight.intensity=0.16+daylight*0.72;
-            dirLight.color.setRGB(1,0.78+daylight*.2,0.58+daylight*.42);
-            dirLight.position.set(player.pos.x+70,Math.max(8,Math.sin(phase)*150),player.pos.z+55);
-            // Đèn đường tự sáng về đêm (nếu có đèn emissive trong cảnh).
-            scene.traverse(o=>{if(o.userData && o.userData.nightLamp){o.material.emissiveIntensity=daylight<.18?2.2:0.05;}});
-        }
 
         // --- VÒNG LẶP CHÍNH ---
         const clock = new THREE.Clock();
@@ -3654,11 +4354,10 @@
             requestAnimationFrame(animate);
             const dt = Math.min(clock.getDelta(), 0.05);
 
-            if (state.started && !state.gameOver && !state.shopOpen) {
-                updateDayNight(dt);
+            if (state.started && !state.gameOver && !state.shopOpen && !state.mapOpen) {
                 if (state.wantedCooldown > 0) state.wantedCooldown -= dt;
 
-                // Hỗ trợ bắn liên thanh khi giữ chuột trái với súng SMG
+                // Hỗ trợ bắn liên thanh khi giữ chuột trái hoặc nút bắn mobile với súng SMG
                 if (state.isMouseDown && WEAPONS[player.weaponIndex].auto) {
                     performAttack();
                 }
@@ -3673,16 +4372,19 @@
                 updatePedestrians(dt);
                 updateEffects(dt);
                 updateTrafficLights(dt);
+                updateDayNightCycle(dt);
                 updateCamera(dt);
                 updateHUD();
                 renderMinimap();
 
-                const isWalking = !player.inVehicle && player.isGrounded && (keys['KeyW'] || keys['KeyS'] || keys['KeyA'] || keys['KeyD']);
-                const isSprinting = isWalking && (keys['ShiftLeft'] || keys['ShiftRight']) && player.stamina > 2;
+                const isWalking = !player.inVehicle && player.isGrounded && (keys['KeyW'] || keys['KeyS'] || keys['KeyA'] || keys['KeyD'] || Math.abs(mobileInput.joyX) > 0.1 || Math.abs(mobileInput.joyY) > 0.1);
+                const isSprinting = isWalking && (keys['ShiftLeft'] || keys['ShiftRight'] || mobileInput.sprint) && player.stamina > 2;
                 const speedRatio = player.inVehicle ? (player.inVehicle.speed / player.inVehicle.maxSpeed) : 0;
-                sound.update(dt, !!player.inVehicle, speedRatio, state.wantedLevel, false, isWalking, isSprinting);
+                const isBicycle = player.inVehicle ? !!player.inVehicle.isBicycle : false;
+                sound.update(dt, !!player.inVehicle, speedRatio, state.wantedLevel, false, isWalking, isSprinting, isBicycle);
             } else {
                 if (!state.started) state.camYaw += dt * 0.14;
+                updateDayNightCycle(dt);
                 updateCamera(dt);
                 sound.update(dt, false, 0, 0, true, false, false);
             }
@@ -3690,31 +4392,8 @@
             renderer.render(scene, camera);
         }
 
-        function addPlayerHomeAndGarage() {
-            const home = new THREE.Group();
-            const wall = new THREE.MeshStandardMaterial({color:0xe5e7eb, roughness:.72});
-            const trim = new THREE.MeshStandardMaterial({color:0x334155, roughness:.55});
-            const roof = new THREE.MeshStandardMaterial({color:0x7f1d1d, roughness:.8});
-            const glass = new THREE.MeshStandardMaterial({color:0x7dd3fc, roughness:.18, metalness:.25});
-            const box=(w,h,d,mat,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;home.add(m);return m;};
-            // Nhà hai tầng, đặt cạnh khu vực xuất phát.
-            box(12,4.2,10,wall,0,2.1,0); box(12,4.2,10,wall,0,6.3,0);
-            const roofMesh=new THREE.Mesh(new THREE.ConeGeometry(8.1,2.4,4),roof);roofMesh.position.set(0,9.6,0);roofMesh.rotation.y=Math.PI/4;home.add(roofMesh);
-            for(let floor=0;floor<2;floor++){for(let x of [-3.8,0,3.8]){box(1.65,1.35,.12,glass,x,2.1+floor*4.2,5.08);box(.12,1.45,.16,trim,x,2.1+floor*4.2,5.12);}}
-            box(2,3.1,.18,trim,0,1.55,5.12);
-            // Gara cạnh nhà; cửa mở rộng để xe có thể vào khi có hệ thống gara.
-            box(8,3.6,7,wall,10,1.8,1); box(8.2,.22,7.2,roof,10,3.65,1);
-            box(8.1,2.9,.2,trim,10,1.45,4.55);
-            // Nội thất nhìn thấy qua cửa sổ: TV, kệ, ghế và giường.
-            box(2.4,1.35,.18,trim,-2,1.05,2.8); box(1.8,1.05,.12,new THREE.MeshStandardMaterial({color:0x111827,emissive:0x0c2340}),-2,1.65,2.68);
-            box(2.6,.55,1.1,new THREE.MeshStandardMaterial({color:0x64748b}),2,.55,2.2);
-            box(2.2,.3,3,new THREE.MeshStandardMaterial({color:0x94a3b8}),-2,4.55,-1.8);
-            home.position.set(18,0,-18); scene.add(home);
-        }
-
         window.onload = function () {
             buildCity();
-            addPlayerHomeAndGarage();
             initTraffic();
             initPedestrians();
             animate();
